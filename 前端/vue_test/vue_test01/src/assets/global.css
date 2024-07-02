@@ -1,0 +1,9 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+/*所有元素变成盒状模型*/
+/*外边距不会占用额外的1px像素*/
+*{
+    box-sizing: border-box; 
+}
