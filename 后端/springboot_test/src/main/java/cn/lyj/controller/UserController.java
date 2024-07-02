@@ -43,16 +43,7 @@ public class UserController {
         List<User> user = userService.selectOne(name, phone);
         return Result.success(user);
     }
-
-//
-//    @PostMapping("/add")
-//    public Result addUser(@RequestBody User user) {
-//        Integer i = userService.addUser(user);
-//        if (i != 1) {
-//            return Result.error();
-//        }
-//        return Result.success();
-//    }
+    
 
     @DeleteMapping("/del/{id}")
     public Result delById(@PathVariable Integer id) {
