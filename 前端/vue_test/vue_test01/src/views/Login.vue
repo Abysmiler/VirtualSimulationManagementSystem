@@ -1,56 +1,58 @@
-<!-- 登录界面 -->
 <template>
     <div class="home">
         <el-row type="flex" class="row-bg" justify="center">
-            <div class="bg-img"></div>
+            <div class="bg-img">
+
+            </div>
             <el-col :span="2">
                 <div class="grid-content bg-purple"></div>
             </el-col>
             <el-col :span="10">
+                <!-- 登录表单 -->
                 <div class="login-div">
-                    <!-- 登录表单 -->
-                    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px"
-                        class="login-form custom-label">
+                    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px" @keyup.enter.native="login('ruleForm')"
+                        class="login-form login-label">
                         <div style="text-align: center;">
-                            <h1>
+                            <h1 style="color: aliceblue;">
                                 <pre>欢迎登录虚拟仿真实训教学管理
-    及资源共享平台管理系统</pre>
+    及资源共享云平台管理系统</pre>
                             </h1>
                         </div>
-
                         <el-form-item label="账户" prop="username">
                             <el-input v-model="ruleForm.username"></el-input>
                         </el-form-item>
-
-                        <el-form-item label="密码" prop="password">
-                            <el-input @keyup.enter.native="login('ruleForm')" type="password"
-                                v-model="ruleForm.password" autocomplete="off"></el-input>
+                        <el-form-item label="密码" prop="pass">
+                            <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
                         </el-form-item>
-
+                        <el-form-item label="用户类型" prop="type">
+                            <el-select v-model="ruleForm.type" placeholder="请选择用户类型">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                         <el-form-item class="login-btn" label-width="0">
                             <el-button type="primary" @click="login('ruleForm')">登录</el-button>
                             <el-button @click="toRegister()">注册</el-button>
-                        </el-form-item>
-                        <el-form-item style="text-align: center;">
-                            <a class="findpassword-link" style="margin-right: 17%;" @click="tofindpassword()">忘记密码?去找回</a>
                         </el-form-item>
                     </el-form>
                 </div>
             </el-col>
         </el-row>
+
     </div>
 </template>
 
 <script>
-// 引入了组件
+//引入
 import request from '@/utils/request';
 
 export default {
     data() {
-        // 自定义验证密码规则
+        // 自定义密码验证规则
         var validatePass = (rule, value, callback) => {
             if (value === '') {
-                callback(new Error('密码不能为空'));
+                callback(new Error('请输入密码'));
             } else {
                 if (this.ruleForm.checkPass !== '') {
                     this.$refs.ruleForm.validateField('checkPass');
@@ -58,131 +60,137 @@ export default {
                 callback();
             }
         };
-
+        //用户类型校验
+        var checkType = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请选择'));
+            } else {
+                callback();
+            }
+        };
         return {
             options: [{
                 value: 1,
                 label: '学生'
             }, {
                 value: 2,
-                label: '教职工'
+                label: '管理员'
             }, {
                 value: 3,
-                label: '实验室管理员'
-            }],
+                label: '系统管理员'
+            }
+            ],
             value: '',
             ruleForm: {
                 username: '',
                 password: '',
-                type: '1'            },
+                type: ''
+            },
             rules: {
                 password: [
-                    {
-                        min: 6,
-                        max: 12,
-                        message: '长度在 6 到 12 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: validatePass, trigger: 'blur' },
-
+                    // validator:自定义表单校验规则  trigger: 'blur' 当失去焦点时触发校验
+                    { min: 6, max: 12, message: '长度6到12位字符', trigger: 'blur' },
+                    { validator: validatePass, trigger: 'blur' }
                 ],
                 username: [
-                    { required: true, message: '账户名不能为空' }
+                    { required: true, message: '账户不能为空' }
                 ],
             }
         };
     },
     methods: {
+        // formName = ruleForm
         login(formName) {
-            //刚刚的ref生效
             this.$refs[formName].validate((valid) => {
+
                 if (valid) {
-                    //获取select选择器中label的值
-                    // let test1 = this.options.find(option => option.value ===  this.ruleForm.type);
-                    // console.log(test1.label);
-                    //如果校验用户输入的信息都正确,那么可以发送请求访问后台注册接口
-                    let params = {
-                        username: this.ruleForm.username,
-                        password: this.ruleForm.password,
-                        type: this.ruleForm.type
-                    }
-                    request.post('/user/login',params).then(res => {
+                    // alert(1111)
+                    // console.log(this.ruleForm)
+                    //如果校验用户输入的信息都正确，那么可以发送请求访问后台登录接口
+                    request.post('/user/login', this.ruleForm).then(res => {
                         //code为0代表登录成功
                         if (res.code == 0) {
-                            //弹窗提示用户登录成功
-                            this.$message.success("登录成功,即将跳转到后台首页")
-                            //登录成功得到用户的登录信息，将其保存在浏览器的本地存储中
-                            localStorage.setItem("user",JSON.stringify(res.data))
-                            //定时器，两秒后跳转页面
+                            // 弹窗提示用户登录成功
+                            this.$message.success('登录成功，即将跳转首页')
+                            // this.$message({
+                            //     showClose: true,
+                            //     message: '登录成功，即将跳转首页',
+                            //     type: 'success'
+                            // });
+
+                            // 登录成功得到用户信息，将其保存在浏览器的本地存储中
+                            // localStorage.setItem("user",res.data)
+                            localStorage.setItem("user", JSON.stringify(res.data))
+
+
+                            //定时器 2s后跳转页面
                             setTimeout(() => {
                                 this.$router.push('/')
-                            }, 2000);
+                            }, 2000)
+
                         } else {
-                            //code不为0代表失败，弹出提示信息
+                            //code不为0弹出提示信息
                             let msg = res.msg
                             this.$message.error(msg)
                         }
                     })
                 } else {
-                    console.log('error submit!!');
-                    return false;
+                    console.log('error submit!!')
+                    return false
                 }
             });
         },
         toRegister() {
             this.$router.push('/register')
-        },
-        tofindpassword() { 
-            this.$router.push('/findpassword')
         }
     }
 }
 </script>
 
+
+
 <style>
-button{
-    width: 120px;
-    /* height: 50px; */
-}
-.login-btn{
-    text-align: center;
-}
-.login-div {
-    /* 设置表单距浏览器上边距 */
-    margin-top: 20%;
-    width: 770px;
+button {
+    width: 150px;
 }
 
-/* 设置背景图片 */
+.login-btn {
+    text-align: center;
+}
+
+/* .home{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100vh;
+} */
+
+.login-div {
+    margin-top: 20%;
+    /* width:100%;
+    max-width: 400px; */
+}
+
+.login-form {
+    width: 90%;
+    background-color: rgba(255, 255, 255, 0.10);
+    padding: 30px;
+    border-radius: 15px;
+}
+
 .bg-img {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     height: 100%;
+    width: 100%;
     background-image: url('../assets/loginbg.png');
     background-size: cover;
     background-position: center;
-    z-index: -10; /*层级 */
+    z-index: -10;
 }
 
-/* 设置表单背景色 */
-.login-form {
-    width: 80%;
-    padding: 30px;
-    /* 设置透明背景 */
-    background-color: rgba(255, 255, 255, 0.30);
-    border-radius: 14px;
-}
-
-.custom-label .el-form-item__label {
-    /*设置标签文字颜色为白色 */
-    color: #ffffff;
-}
-
-.findpassword-link{
-    color: #ffffff;
-    text-decoration: underline;
-    cursor: pointer;
+.login-label .el-form-item__label {
+    color: aliceblue;
 }
 </style>

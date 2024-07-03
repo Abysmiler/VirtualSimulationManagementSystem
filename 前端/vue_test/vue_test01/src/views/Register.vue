@@ -1,21 +1,30 @@
-<!-- 注册界面 -->
 <template>
     <div class="home">
-        <el-row type="flex" class="row-bg" justify="center">
-            <div class="bg-img"></div>
-            <el-col :span="2">
+        <el-row>
+            <div class="bg-img">
+
+            </div>
+            <el-col :span="8">
                 <div class="grid-content bg-purple"></div>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="8">
+                <div class="grid-content bg-purple-light"></div>
+            </el-col>
+            <el-col :span="8" :offset="16">
                 <div class="register-div">
                     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px"
-                        class="register-form custom-label">
-                        <h1 style="text-align: center;">注&emsp;&emsp;&emsp;册</h1>
+                        class="register-form register-label">
+                        <div style="text-align: center;">
+                            <h1 style="color: aliceblue;"><pre>注    册</pre></h1>
+                        </div>
                         <el-form-item label="用户姓名" prop="name">
                             <el-input v-model="ruleForm.name"></el-input>
                         </el-form-item>
                         <el-form-item label="账户" prop="username">
                             <el-input v-model="ruleForm.username"></el-input>
+                        </el-form-item>
+                        <el-form-item label="年龄" prop="age">
+                            <el-input v-model.number="ruleForm.age"></el-input>
                         </el-form-item>
                         <el-form-item label="邮箱" prop="email">
                             <el-input v-model="ruleForm.email"></el-input>
@@ -23,7 +32,7 @@
                         <el-form-item label="手机号" prop="phone">
                             <el-input v-model="ruleForm.phone"></el-input>
                         </el-form-item>
-                        <el-form-item label="密码" prop="password">
+                        <el-form-item label="密码" prop="pass">
                             <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="checkPass">
@@ -40,27 +49,20 @@
                             <el-button type="primary" @click="register('ruleForm')">提交</el-button>
                             <el-button @click="resetForm('ruleForm')">重置</el-button>
                         </el-form-item>
-                        <el-form-item>
-                            <a class="login-link" @click="toLogin()">已有账号?去登录</a>
-                        </el-form-item>
                     </el-form>
                 </div>
             </el-col>
         </el-row>
+
     </div>
 </template>
 
 <script>
-// 引入了组件
+//引入
 import request from '@/utils/request';
-import HelloWorld from '../components/HelloWorld.vue'
+
 
 export default {
-    name: 'HomeView',
-    //声明了组件，这样才可以作为标签来使用
-    components: {
-        HelloWorld
-    },
     data() {
         var validatePass = (rule, value, callback) => {
             if (value === '') {
@@ -82,55 +84,74 @@ export default {
             }
         };
 
+        //邮箱校验
         var checkEmail = (rule, value, callback) => {
-            //定义正则表达式对输入的邮箱格式进行校验
-            const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-            var flag = reg.test(value);
-
-            if (value === '') {
+            // 定义正则表达式
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            //使用正则表达式，返回值为bool类型，满足为true，不满足为false
+            if (!value) {
                 callback(new Error('邮箱不能为空'));
-            } else if (!flag) {
-                callback(new Error('邮箱格式有误，请输入正确的邮箱'));
+            } else if (!emailPattern.test(value)) {
+                callback(new Error('请输入正确的邮箱格式'))
             } else {
                 callback();
             }
         };
+        //手机号校验
         var checkPhone = (rule, value, callback) => {
-            //定义正则表达式对输入的电话格式进行校验
-            const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-            var flag = reg.test(value);
-
-            if (value === '') {
+            // 定义正则表达式
+            const phonePattern = /^1[3-9]\d{9}$/;
+            //使用正则表达式，返回值为bool类型，满足为true，不满足为false
+            if (!value) {
                 callback(new Error('手机号不能为空'));
-            } else if (!flag) {
-                callback(new Error('手机号格式有误，请输入正确的手机号'));
+            } else if (!phonePattern.test(value)) {
+                callback(new Error('请输入正确的手机号格式'))
             } else {
                 callback();
             }
-
         };
+        //年龄校验
+        var checkAge = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('年龄不能为空'));
+            }
+            setTimeout(() => {
+                if (!Number.isInteger(value)) {
+                    callback(new Error('请输入数字值'));
+                } else {
+                    if (value < 18) {
+                        callback(new Error('必须年满18岁'));
+                    } else {
+                        callback();
+                    }
+                }
+            }, 1000);
+        };
+        //用户类型校验
         var checkType = (rule, value, callback) => {
             if (value === '') {
-                callback(new Error('请选择用户类型'))
+                callback(new Error('请选择'));
             } else {
                 callback();
             }
         };
         return {
             options: [{
-                value: '学生',
+                value: 1,
                 label: '学生'
             }, {
-                value: '教师',
-                label: '教师'
+                value: 2,
+                label: '教职工'
             }, {
-                value: '管理员',
-                label: '管理员'
-            }],
+                value: 3,
+                label: '实验室管理员'
+            }
+            ],
             value: '',
             ruleForm: {
                 name: '',
                 username: '',
+                age: '',
                 email: '',
                 phone: '',
                 password: '',
@@ -139,73 +160,54 @@ export default {
             },
             rules: {
                 password: [
-                    {
-                        required: true,
-                        message: '请输入密码',
-                        trigger: 'blur'
-                    },
-                    {
-                        min: 6,
-                        max: 12,
-                        message: '长度在 6 到 12 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: validatePass, trigger: 'blur' },
-
-                ],
-                username: [
-                    { required: true, message: '账户名不能为空' }
-                ],
-                name: [
-                    { required: true, message: '用户名不能为空' }
+                    // validator:自定义表单校验规则  trigger: 'blur' 当失去焦点时触发校验
+                    { min: 6, max: 12, message: '长度6到12位字符', trigger: 'blur' },
+                    { validator: validatePass, trigger: 'blur' }
                 ],
                 checkPass: [
                     { validator: validatePass2, trigger: 'blur' }
                 ],
-                //自定义验证规则
-                email: [
-                    { required: true, validator: checkEmail, trigger: 'blur' }
+                age: [
+                    { validator: checkAge, trigger: 'blur' },
+                    { required: true, message: '年龄不能为空' }
                 ],
                 phone: [
-                    {
-                        required: true,
-                        message: '请输入手机号',
-                        trigger: 'blur'
-                    },
-                    { validator: checkPhone, trigger: 'blur' }
+                    { validator: checkPhone, trigger: 'blur' },
+                    { required: true, message: '手机号不能为空' }
+                ],
+                email: [
+                    { validator: checkEmail, trigger: 'blur' },
+                    { required: true, message: '邮箱不能为空' }
+                ],
+                username: [
+                    { required: true, message: '账户不能为空' }
+                ],
+                name: [
+                    { required: true, message: '用户姓名不能为空' }
                 ],
                 type: [
-                    { required: true, message: '用户类型不能为空' },
                     { validator: checkType, trigger: 'blur' }
-                ],
+                ]
             }
         };
     },
     methods: {
+        // formName = ruleForm
         register(formName) {
-            //刚刚的ref生效
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    //获取select选择器中label的值
-                    // let test1 = this.options.find(option => option.value ===  this.ruleForm.type);
-                    // console.log(test1.label);
-                    //如果校验用户输入的信息都正确,那么可以发送请求访问后台注册接口
+                    //如果校验用户输入的信息都正确，那么可以发送请求访问后台注册接口
                     request.post('/user/register', this.ruleForm).then(res => {
-                        //code为0代表用户成功
                         if (res.code == 0) {
-                            //提示用戶注冊成功
                             this.$message({
                                 showClose: true,
-                                message: '注册成功,即将跳转到登录页',
+                                message: '注册成功，即将跳转登录页',
                                 type: 'success'
                             });
-                            //并且跳转到登录页
-                            this.$router.push('/login')
+                            this.$router.push('/')
                         } else {
-                            //code不为0代表失败，弹出提示信息
-
-                            let msg = res.msg
-                            this.$message.error(msg)
+                            let msg = res.msg;
+                            this.$message.error(msg);
                         }
                     })
                 } else {
@@ -214,11 +216,6 @@ export default {
                 }
             });
         },
-
-        toLogin() {
-            this.$router.push('/login');
-        },
-
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }
@@ -227,41 +224,30 @@ export default {
 </script>
 
 <style>
-.register-div {
-    /* 设置表单距浏览器上边距 */
-    margin-top: 17.5%;
+.register-form {
+    margin-top: 25%;
 }
 
-/* 设置背景图片 */
+.register-form {
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.10);
+    padding: 30px;
+    border-radius: 15px;
+}
+
 .bg-img {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     height: 100%;
+    width: 100%;
     background-image: url('../assets/loginbg.png');
     background-size: cover;
     background-position: center;
     z-index: -10;
 }
 
-/* 设置表单背景色 */
-.register-form {
-    width: 80%;
-    padding: 30px;
-    /* 设置透明背景 */
-    background-color: rgba(255, 255, 255, 0.30);
-    border-radius: 14px;
-}
-
-.custom-label .el-form-item__label {
-    /*设置标签文字颜色为白色 */
-    color: #ffffff;
-}
-
-.login-link {
-    color: white;
-    text-decoration: underline;
-    cursor: pointer;
+.register-label .el-form-item__label {
+    color: aliceblue;
 }
 </style>
