@@ -61,7 +61,6 @@
     <select id="selectAll" resultMap="resultUserMap">
         select *
         from user
-        where  type!='role_admin'
     </select>
 
     <select id="selectOne" resultMap="resultUserMap">

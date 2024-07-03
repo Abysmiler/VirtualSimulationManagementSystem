@@ -43,7 +43,7 @@ public class UserController {
         List<User> user = userService.selectOne(name, phone);
         return Result.success(user);
     }
-    
+
 
     @DeleteMapping("/del/{id}")
     public Result delById(@PathVariable Integer id) {
