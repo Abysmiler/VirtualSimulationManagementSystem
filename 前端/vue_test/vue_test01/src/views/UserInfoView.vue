@@ -2,7 +2,7 @@
     <div>
         <el-descriptions class="margin-top" title="个人信息" :column="3" :size="size" border>
             <template slot="extra">
-                <el-button type="primary" size="small" @click="edit">编辑</el-button>
+                <el-button type="primary" size="small" @click="edit" class="userInfo-btn">编辑</el-button>
             </template>
             <el-descriptions-item>
                 <template slot="label">
@@ -30,7 +30,7 @@
                     <i class="el-icon-tickets"></i>
                     权限
                 </template>
-                <el-tag size="small">{{ user.type }}</el-tag>
+                <el-tag size="small">{{ user.userType }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
@@ -153,6 +153,12 @@ export default {
 
 .select-sex .el-input__inner {
   text-align: center;
+}
+
+.userInfo-btn{
+    width: 80px;
+    margin-right: 5px;
+    border-radius: 50px;
 }
 </style>
 

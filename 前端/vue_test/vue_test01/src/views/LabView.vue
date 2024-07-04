@@ -1,24 +1,24 @@
 <template>
     <div>
-        <el-input class="lab-input" placeholder="请输入实验室名称" v-model="name" clearable></el-input>
+        <el-input class="lab-input" placeholder="请输入实验室名称" v-model="labName" clearable></el-input>
         <el-button class="lab-btn" type="primary" plain @click="searchLabs()">搜索</el-button>
-        <el-button v-if="user.type == '管理员'" class="lab-btn" icon="el-icon-circle-plus-outline" @click="dialogAddVisible = true">新建</el-button>
+        <el-button v-if="user.userType == '管理员'" class="lab-btn" icon="el-icon-circle-plus-outline" @click="dialogAddVisible = true">新建</el-button>
         <el-dialog title="添加实验室" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
-                <el-form-item label="序号" :label-width="formLabelWidth" prop="id">
-                    <el-input class="input-length" v-model="addform.id"></el-input>
+                <el-form-item label="序号" :label-width="formLabelWidth" prop="labId">
+                    <el-input class="input-length" v-model="addform.labId"></el-input>
                 </el-form-item>
                 <el-form-item label="实验室名称" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.name"></el-input>
+                    <el-input class="input-length" v-model="addform.labName"></el-input>
                 </el-form-item>
                 <el-form-item label="位置" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.location"></el-input>
+                    <el-input class="input-length" v-model="addform.labLocation"></el-input>
                 </el-form-item>
-                <el-form-item label="容量" :label-width="formLabelWidth" prop="capacity">
-                    <el-input class="input-length" v-model="addform.capacity"></el-input>
+                <el-form-item label="容量" :label-width="formLabelWidth" prop="labCapacity">
+                    <el-input class="input-length" v-model="addform.labCapacity"></el-input>
                 </el-form-item>
                 <el-form-item label="管理员" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.manager"></el-input>
+                    <el-input class="input-length" v-model="addform.labManager"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -28,24 +28,24 @@
         </el-dialog>
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="id" label="ID" width="120">
+                <el-table-column prop="labId" label="实验室ID" width="120">
                 </el-table-column>
-                <el-table-column prop="name" label="实验室名称" width="120">
+                <el-table-column prop="labName" label="实验室名称" width="120">
                 </el-table-column>
-                <el-table-column prop="location" label="位置" width="120">
+                <el-table-column prop="labLocation" label="位置" width="120">
                 </el-table-column>
-                <el-table-column prop="capacity" label="容量(人/室)" width="120">
+                <el-table-column prop="labCapacity" label="容量(人/室)" width="120">
                 </el-table-column>
-                <el-table-column prop="manager" label="管理员" width="120">
+                <el-table-column prop="labManager" label="管理员" width="120">
                 </el-table-column>
-                <el-table-column prop="create_time" label="创建时间" :formatter="formatDate">
+                <el-table-column prop="labCreateTime" label="创建时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column prop="update_time" label="更新时间" :formatter="formatDate">
+                <el-table-column prop="labUpdateTime" label="更新时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.type == '管理员'"  >
+                <el-table-column label="操作" v-if="user.userType == '管理员'"  >
                     <template slot-scope="scope">
                         <el-button class="lab-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
-                        <el-popconfirm title="是否删除该实验室?" @confirm="del(scope.row.id)">
+                        <el-popconfirm title="是否删除该实验室?" @confirm="del(scope.row.labId)">
                             <el-button slot="reference" class="lab-btn" type="danger">删除</el-button>
                         </el-popconfirm>
                     </template>
@@ -54,21 +54,21 @@
             <el-dialog title="修改实验室信息" :visible.sync="dialogFormVisible">
                 <el-form ref="editForm" :model="editform"  :rules="rules"> 
                     <el-form-item label="实验室名称" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.name" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.labName" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="位置" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.location" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.labLocation" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item  label="容量(人/室)" :label-width="formLabelWidth"  prop="capacity">
-                        <el-input class="input-length" v-model="editform.capacity" autocomplete="off"></el-input>
+                    <el-form-item  label="容量(人/室)" :label-width="formLabelWidth"  prop="labCapacity">
+                        <el-input class="input-length" v-model="editform.labCapacity" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="管理员" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.manager" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.labManager" autocomplete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="confirmEdit()">确 定</el-button>
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -85,7 +85,7 @@ export default {
     data() {
         return {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
-            name: '',
+            labName: '',
             currentPage: 1,
             pageSize: 5,
             dialogFormVisible: false,
@@ -94,26 +94,26 @@ export default {
             pagedData: [],
             formLabelWidth: '120px',
             editform: {
-                name: '',
-                location: '',
-                capacity: '',
-                manager: '',
-                update_time: '',  // 设置初始值为当前时间
+                labName: '',
+                labLocation: '',
+                labCapacity: '',
+                labManager: '',
+                labUpdateTime: '',  // 设置初始值为当前时间
             },
             addform: {
-                id: '',
-                name: '',
-                location: '',
-                capacity: '',
-                manager: '',
-                create_time: '',
+                labId: '',
+                labName: '',
+                labLocation: '',
+                labCapacity: '',
+                labManager: '',
+                labCreateTime: '',
             },
             rules: {
-                id: [
+                labId: [
                     { required: true, message: '请输入序号', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '序号必须为正整数', trigger: 'blur' }
                 ],
-                capacity: [
+                labCapacity: [
                     { required: true, message: '请输入容量', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '容量必须为正整数', trigger: 'blur' }
                 ]
@@ -123,7 +123,7 @@ export default {
     methods: {
         searchLabs() {
             let params = {
-                name: this.name,
+                labName: this.labName,
             }
             request.get("/lab/searchLabs", { params }).then(res => {
                 if (res.code == 0) {
@@ -134,8 +134,8 @@ export default {
                 }
             })
         },
-        del(id) {
-            request.delete('/lab/delete/' + id).then(res => {
+        del(labId) {
+            request.delete('/lab/delete/' + labId).then(res => {
                 if (res.code == 0) {
                     this.$message.success('删除成功');
                     this.searchLabs(); // 更新表格数据
@@ -147,7 +147,7 @@ export default {
         addLab() {
             this.$refs.addForm.validate((valid) => {
                 if (!valid) return;
-                this.addform.create_time = new Date();
+                this.addform.labCreateTime = new Date();
                 request.post("/lab/addLab", this.addform).then(res => {
                     if (res.code == 0) {
                         this.$message.success('添加成功');
@@ -155,12 +155,12 @@ export default {
                         this.searchLabs();
                         // 重置addform
                         this.addform = {
-                            id: '',
-                            name: '',
-                            location: '',
-                            capacity: '',
-                            manager: '',
-                            create_time: '',
+                            labId: '',
+                            labName: '',
+                            labLocation: '',
+                            labCapacity: '',
+                            labManager: '',
+                            labCreateTime: '',
                         };
                     } else {
                         this.$message.error(res.msg);
@@ -180,7 +180,7 @@ export default {
         confirmEdit() {
             this.$refs.editForm.validate((valid) => {
                 if (!valid) return;
-                this.editform.update_time = new Date();
+                this.editform.labUpdateTime = new Date();
                 request.post('/lab/update', this.editform).then(res => {
                     if (res.code == 0) {
                         this.$message.success("修改成功");
@@ -220,6 +220,7 @@ export default {
 .lab-btn {
     width: 80px;
     margin-right: 5px;
+    border-radius: 50px;
 }
 
 .table-container {

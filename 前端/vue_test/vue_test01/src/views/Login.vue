@@ -74,7 +74,7 @@ export default {
             ruleForm: {
                 username: '',
                 password: '',
-                type: '1'            },
+                userType: ''            },
             rules: {
                 password: [
                     {
@@ -104,7 +104,7 @@ export default {
                     let params = {
                         username: this.ruleForm.username,
                         password: this.ruleForm.password,
-                        type: this.ruleForm.type
+                        userType: this.ruleForm.userType
                     }
                     request.post('/user/login',params).then(res => {
                         //code为0代表登录成功

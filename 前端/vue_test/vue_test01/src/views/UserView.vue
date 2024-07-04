@@ -1,10 +1,9 @@
 <template>
     <div>
-        <!-- 搜索框 -->
+        <!-- <h1>这里是用户界面</h1> -->
         <el-input class="user-input" placeholder="请输入姓名" v-model="name" clearable></el-input>
         <el-input class="user-input" placeholder="请输入电话" v-model="phone" clearable></el-input>
         <el-button class="user-btn" type="primary" plain @click="selectAll()">搜索</el-button>
-        <!-- 用户信息显示 -->
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100%">
                 <el-table-column prop="id" label="ID" width="120">
@@ -19,10 +18,10 @@
                 </el-table-column>
                 <el-table-column prop="phone" label="手机号">
                 </el-table-column>
-                <el-table-column prop="type" label="用户类型">
+                <el-table-column prop="userType" label="用户类型">
                 </el-table-column>
-                <!-- 操作按钮 只有管理员能操作 -->
-                <el-table-column label="操作" v-if="user.type == '管理员'">
+                <!-- 无法判断是否为管理员身份，需要解决 -->
+                <el-table-column label="操作" v-if="user.userType == '管理员'">
                     <template slot-scope="scope">
                         <el-button class="user-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该用户?" @confirm="del(scope.row.id)">
@@ -50,7 +49,7 @@
                         <el-input class="input-length" v-model="editform.phone" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="用户类型" :label-width="formLabelWidth">
-                        <el-select v-model="editform.type" placeholder="请选择用户类型">
+                        <el-select v-model="editform.userType" placeholder="请选择用户类型">
                             <el-option label="学生" value="学生"></el-option>
                             <el-option label="教师" value="教师"></el-option>
                         </el-select>
@@ -91,7 +90,7 @@ export default {
                 phone: '',
                 username: '',
                 email: '',
-                type: ''
+                userType: ''
             },
             formLabelWidth: '120px'
         }
@@ -173,11 +172,11 @@ export default {
 .user-btn {
     width: 80px;
     margin-right: 5px;
+    border-radius: 50px;
 }
 
 .table-container {
-    height: 300px;
-    /*表格容器的高度*/
+    height: 300px;/*表格容器的高度*/
     overflow: auto;
 }
 
@@ -188,11 +187,10 @@ export default {
 }
 
 .input-length {
-    width: 90%;
-    /* 你可以根据需要调整这个值 */
+    width: 90%; /* 你可以根据需要调整这个值 */
 }
 
-.dialogWidth {
+.dialogWidth{
     margin: auto;
     width: 50%;
 }

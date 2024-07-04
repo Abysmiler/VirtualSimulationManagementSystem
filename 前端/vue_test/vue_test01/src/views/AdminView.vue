@@ -17,7 +17,7 @@
                 </el-table-column>
                 <el-table-column prop="phone" label="手机号">
                 </el-table-column>
-                <el-table-column prop="type" label="用户类型">
+                <el-table-column prop="userType" label="用户类型">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -32,7 +32,7 @@
             <el-dialog title="修改管理员权限" :visible.sync="dialogFormVisible" class="dialogWidth">
                 <el-form :model="editform">
                     <el-form-item label="用户类型" :label-width="formLabelWidth">
-                        <el-select v-model="editform.type" placeholder="请选择用户类型">
+                        <el-select v-model="editform.userType" placeholder="请选择用户类型">
                             <el-option label="学生" value="学生"></el-option>
                             <el-option label="教师" value="教师"></el-option>
                             <el-option label="管理员" value="管理员"></el-option>
@@ -67,7 +67,7 @@ export default {
             tableData: [],//表格数据
             pagedData: [],//分页后的数据
             editform: {
-                type: ''
+                userType: ''
             },
             formLabelWidth: '120px'
         }
@@ -149,6 +149,7 @@ export default {
 .admin-btn {
     width: 80px;
     margin-right: 5px;
+    border-radius: 50px;
 }
 
 .table-container {

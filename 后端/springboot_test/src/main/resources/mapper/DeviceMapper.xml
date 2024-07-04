@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间: 要和mapper持久层层的接口全限定名相同-->
+<mapper namespace="cn.lyj.mapper.DeviceMapper">
+    <resultMap id="resultDeviceMap" type="cn.lyj.entity.Device">
+        <result column="id" property="simulationDeviceId"/>
+        <result column="name" property="simulationDeviceName"/>
+        <result column="type" property="simulationDeviceType"/>
+        <result column="lab_id" property="simulationDeviceLabId"/>
+        <result column="status" property="simulationDeviceStatus"/>
+        <result column="create_time" property="simulationDeviceCreateTime"/>
+        <result column="update_time" property="simulationDeviceUpdateTime"/>
+        <result column="description" property="simulationDeviceDescription"/>
+    </resultMap>
+
+    <insert id="addDevice">
+        INSERT INTO devices
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="simulationDeviceId != null">
+                id,
+            </if>
+            <if test="simulationDeviceName != null">
+                name,
+            </if>
+            <if test="simulationDeviceLabId != null">
+                lab_id,
+            </if>
+            <if test="simulationDeviceType != null">
+                type,
+            </if>
+            <if test="simulationDeviceStatus != null">
+                status,
+            </if>
+            <if test="simulationDeviceCreateTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="simulationDeviceId != null">
+                #{simulationDeviceId},
+            </if>
+            <if test="simulationDeviceName != null">
+                #{simulationDeviceName},
+            </if>
+            <if test="simulationDeviceLabId != null">
+                #{simulationDeviceLabId},
+            </if>
+            <if test="simulationDeviceType != null">
+                #{simulationDeviceType},
+            </if>
+            <if test="simulationDeviceStatus != null">
+                #{simulationDeviceStatus},
+            </if>
+            <if test="simulationDeviceCreateTime != null">
+                #{simulationDeviceCreateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateDevice">
+        update devices
+        <set>
+            <if test="simulationDeviceName != null">name=#{simulationDeviceName},</if>
+            <if test="simulationDeviceType != null">type=#{simulationDeviceType},</if>
+            <if test="simulationDeviceLabId != null">lab_id=#{simulationDeviceLabId},</if>
+            <if test="simulationDeviceStatus != null">status=#{simulationDeviceStatus},</if>
+            <if test="simulationDeviceUpdateTime != null">update_time=#{simulationDeviceUpdateTime},</if>
+        </set>
+        where id=#{simulationDeviceId}
+    </update>
+
+    <select id="searchDevices" resultMap="resultDeviceMap">
+        select *
+        from devices
+        <where>
+            <if test="simulationDeviceName != null and simulationDeviceName != ''">
+                name like concat('%',#{simulationDeviceName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getDeviceById" resultMap="resultDeviceMap">
+        SELECT *
+        FROM devices
+        WHERE id = #{simulationDeviceId}
+    </select>
+
+    <delete id="deleteDevice">
+        DELETE FROM devices
+        WHERE id = #{simulationDeviceId}
+    </delete>
+
+</mapper>

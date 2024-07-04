@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lyj.mapper.ResourceMapper">
+
+    <resultMap id="resultResourceMap" type="cn.lyj.entity.Resource">
+        <result column="id" property="resourceId"/>
+        <result column="name" property="resourceName"/>
+        <result column="type" property="resourceType"/>
+        <result column="content" property="resourceContent"/>
+        <result column="create_time" property="resourceCreateTime"/>
+        <result column="update_time" property="resourceUpdateTime"/>
+        <result column="description" property="resourceDescription"/>
+    </resultMap>
+
+    <insert id="addResource">
+        INSERT INTO resources
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null">
+                id,
+            </if>
+            <if test="resourceName != null">
+                name,
+            </if>
+            <if test="resourceType != null">
+                type,
+            </if>
+            <if test="resourceDescription != null">
+                description,
+            </if>
+            <if test="resourceCreateTime != null">
+                create_time,
+            </if>
+            <if test="resourceUpdateTime != null">
+                update_time,
+            </if>
+            <if test="resourceContent != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null">
+                #{resourceId},
+            </if>
+            <if test="resourceName != null">
+                #{resourceName},
+            </if>
+            <if test="resourceType != null">
+                #{resourceType},
+            </if>
+            <if test="resourceDescription != null">
+                #{resourceDescription},
+            </if>
+            <if test="resourceCreateTime != null">
+                #{resourceCreateTime},
+            </if>
+            <if test="resourceUpdateTime != null">
+                #{resourceUpdateTime},
+            </if>
+            <if test="resourceContent != null">
+                #{resourceContent},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateResource">
+        update resources
+        <set>
+            <if test="resourceName != null">name=#{resourceName},</if>
+            <if test="resourceType != null">type=#{resourceType},</if>
+            <if test="resourceUpdateTime != null">update_time=#{resourceUpdateTime},</if>
+        </set>
+        where id=#{resourceId}
+    </update>
+
+    <select id="searchResources" resultMap="resultResourceMap">
+        select *
+        from resources
+        <where>
+            <if test="resourceName != null and resourceName != ''">
+                name like concat('%',#{resourceName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getResourceById" resultMap="resultResourceMap">
+        SELECT *
+        FROM resources
+        WHERE id = #{resourceId}
+    </select>
+
+    <delete id="deleteResource">
+        DELETE FROM resources
+        WHERE id=#{resourceId}
+    </delete>
+
+</mapper>
