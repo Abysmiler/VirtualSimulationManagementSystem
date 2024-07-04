@@ -21,7 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 //放行登录、注册，不校验token
                 .excludePathPatterns("/api/user/login")
-                .excludePathPatterns("/api/user/register");
+                .excludePathPatterns("/api/user/register")
+                .excludePathPatterns("/api/user/findpassword");
     }
 
     //拦截路径

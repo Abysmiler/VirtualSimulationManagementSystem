@@ -1,25 +1,25 @@
 <template>
     <div>
-        <el-input class="course-input" placeholder="请输入课程名称" v-model="name" clearable></el-input>
-        <el-button class="course-btn" type="primary" plain @click="searchCourses()">搜索</el-button>
-        <el-button v-if="user.type == '管理员'" class="course-btn" icon="el-icon-circle-plus-outline"
+        <el-input class="course-input" placeholder="请输入课程名称" v-model="courseName" clearable></el-input>
+        <el-button class="course-btn" type="primary" plain @click="selectAll()">搜索</el-button>
+        <el-button v-if="user.userType == '管理员'" class="course-btn" icon="el-icon-circle-plus-outline"
             @click="dialogAddVisible = true">新建</el-button>
         <el-dialog title="添加课程" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
-                <el-form-item label="序号" :label-width="formLabelWidth" prop="id">
-                    <el-input class="input-length" v-model="addform.id"></el-input>
+                <el-form-item label="序号" :label-width="formLabelWidth" prop="courseId">
+                    <el-input class="input-length" v-model="addform.courseId"></el-input>
                 </el-form-item>
-                <el-form-item label="课程名称" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.name"></el-input>
+                <el-form-item label="课程名称" :label-width="formLabelWidth" prop="courseName">
+                    <el-input class="input-length" v-model="addform.courseName"></el-input>
                 </el-form-item>
-                <el-form-item label="授课教师id" :label-width="formLabelWidth" prop="instructor_id">
-                    <el-input class="input-length" v-model="addform.instructor_id"></el-input>
+                <el-form-item label="授课教师id" :label-width="formLabelWidth" prop="instructorId">
+                    <el-input class="input-length" v-model="addform.instructorId"></el-input>
                 </el-form-item>
-                <el-form-item label="课程资源id" :label-width="formLabelWidth" prop="resource_id">
-                    <el-input class="input-length" v-model="addform.resource_id"></el-input>
+                <el-form-item label="课程资源id" :label-width="formLabelWidth" prop="resourceId">
+                    <el-input class="input-length" v-model="addform.resourceId"></el-input>
                 </el-form-item>
                 <el-form-item label="学时" :label-width="formLabelWidth">
-                    <el-input-number class="input-length-number" v-model="addform.schedule" :min="0" :step="2"
+                    <el-input-number class="input-length-number" v-model="addform.creditHour" :min="0" :step="2"
                         controls-position="right"></el-input-number>
                 </el-form-item>
             </el-form>
@@ -30,24 +30,24 @@
         </el-dialog>
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="id" label="ID" width="120">
+                <el-table-column prop="courseId" label="课程ID" width="120">
                 </el-table-column>
-                <el-table-column prop="name" label="课程名称" width="120">
+                <el-table-column prop="courseName" label="课程名称" width="120">
                 </el-table-column>
-                <el-table-column prop="instructor_id" label="授课教师id" width="120">
+                <el-table-column prop="instructorId" label="授课教师id" width="120">
                 </el-table-column>
-                <el-table-column prop="resource_id" label="课程资源id" width="120">
+                <el-table-column prop="resourceId" label="课程资源id" width="120">
                 </el-table-column>
-                <el-table-column prop="schedule" label="学时" width="120">
+                <el-table-column prop="creditHour" label="学时" width="120">
                 </el-table-column>
-                <el-table-column prop="create_time" label="创建时间" :formatter="formatDate">
+                <el-table-column prop="courseCreateTime" label="创建时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column prop="update_time" label="更新时间" :formatter="formatDate">
+                <el-table-column prop="courseUpdateTime" label="更新时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.type == '管理员'">
+                <el-table-column label="操作" v-if="user.userType == '管理员'">
                     <template slot-scope="scope">
                         <el-button class="course-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
-                        <el-popconfirm title="是否删除该课程?" @confirm="del(scope.row.id)">
+                        <el-popconfirm title="是否删除该课程?" @confirm="del(scope.row.courseId)">
                             <el-button slot="reference" class="course-btn" type="danger">删除</el-button>
                         </el-popconfirm>
                     </template>
@@ -56,16 +56,16 @@
             <el-dialog title="修改课程信息" :visible.sync="dialogFormVisible">
                 <el-form ref="editForm" :model="editform" :rules="rules">
                     <el-form-item label="课程名称" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.name" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.courseName" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="授课教师id" :label-width="formLabelWidth" prop="instructor_id">
-                        <el-input class="input-length" v-model="editform.instructor_id"></el-input>
+                    <el-form-item label="授课教师id" :label-width="formLabelWidth" prop="instructorId">
+                        <el-input class="input-length" v-model="editform.instructorId"></el-input>
                     </el-form-item>
-                    <el-form-item label="课程资源id" :label-width="formLabelWidth" prop="resource_id">
-                        <el-input class="input-length" v-model="editform.resource_id"></el-input>
+                    <el-form-item label="课程资源id" :label-width="formLabelWidth" prop="resourceId">
+                        <el-input class="input-length" v-model="editform.resourceId"></el-input>
                     </el-form-item>
                     <el-form-item label="学时" :label-width="formLabelWidth">
-                        <el-input-number class="input-length-number" v-model="editform.schedule" :min="0" :step="2"
+                        <el-input-number class="input-length-number" v-model="editform.creditHour" :min="0" :step="2"
                             controls-position="right"></el-input-number>
                     </el-form-item>
                 </el-form>
@@ -87,7 +87,7 @@ export default {
     data() {
         return {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
-            name: '',
+            courseName: '',
             currentPage: 1,
             pageSize: 5,
             dialogFormVisible: false,
@@ -96,30 +96,30 @@ export default {
             pagedData: [],
             formLabelWidth: '120px',
             editform: {
-                name: '',
-                instructor_id: '',
-                resource_id: '',
-                schedule: '',
-                update_time: '',  // 设置初始值为当前时间
+                courseName: '',
+                instructorId: '',
+                resourceId: '',
+                creditHour: '',
+                courseUpdateTime: '',  // 设置初始值为当前时间
             },
             addform: {
-                id: '',
-                name: '',
-                instructor_id: '',
-                resource_id: '',
-                schedule: '',
-                create_time: '',
+                courseId: '',
+                courseName: '',
+                instructorId: '',
+                resourceId: '',
+                creditHour: '',
+                courseCreateTime: '',
             },
             rules: {
-                id: [
+                courseId: [
                     { required: true, message: '请输入序号', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '序号必须为正整数', trigger: 'blur' }
                 ],
-                instructor_id: [
+                instructorId: [
                     { required: true, message: '请输入授课教师id', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '授课教师id必须为正整数', trigger: 'blur' }
                 ],
-                resource_id: [
+                resourceId: [
                     { required: true, message: '请输入课程资源id', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '课程资源id必须为正整数', trigger: 'blur' }
                 ]
@@ -127,11 +127,11 @@ export default {
         }
     },
     methods: {
-        searchCourses() {
+        selectAll() {
             let params = {
-                name: this.name,
+                courseName: this.courseName,
             }
-            request.get("/course/searchCourses", { params }).then(res => {
+            request.get("/course/selectAll", { params }).then(res => {
                 if (res.code == 0) {
                     this.tableData = res.data;
                     this.handlePagination();
@@ -140,11 +140,11 @@ export default {
                 }
             })
         },
-        del(id) {
-            request.delete('/course/delete/' + id).then(res => {
+        del(courseId) {
+            request.delete('/course/delete/' + courseId).then(res => {
                 if (res.code == 0) {
                     this.$message.success('删除成功');
-                    this.searchCourses(); // 更新表格数据
+                    this.selectAll(); // 更新表格数据
                 } else {
                     this.$message.error(res.msg);
                 }
@@ -153,20 +153,20 @@ export default {
         addCourse() {
             this.$refs.addForm.validate((valid) => {
                 if (!valid) return;
-                this.addform.create_time = new Date();
+                this.addform.courseCreateTime = new Date();
                 request.post("/course/addCourse", this.addform).then(res => {
                     if (res.code == 0) {
                         this.$message.success('添加成功');
                         this.dialogAddVisible = false;
-                        this.searchCourses();
+                        this.selectAll();
                         // 重置addform
                         this.addform = {
-                            id: '',
-                            name: '',
-                            instructor_id: '',
-                            resource_id: '',
-                            schedule: '',
-                            create_time: '',
+                            courseId: '',
+                            courseName: '',
+                            instructorId: '',
+                            resourceId: '',
+                            creditHour: '',
+                            courseCreateTime: '',
                         };
                     } else {
                         this.$message.error(res.msg);
@@ -185,7 +185,7 @@ export default {
         confirmEdit() {
             this.$refs.editForm.validate((valid) => {
                 if (!valid) return;
-                this.editform.update_time = new Date();
+                this.editform.courseUpdateTime = new Date();
                 request.post('/course/update', this.editform).then(res => {
                     if (res.code == 0) {
                         this.$message.success("修改成功");
@@ -211,7 +211,7 @@ export default {
         },
     },
     mounted() {
-        this.searchCourses()
+        this.selectAll()
     }
 }
 </script>
@@ -224,6 +224,7 @@ export default {
 .course-btn {
     width: 80px;
     margin-right: 5px;
+    border-radius: 50px;
 }
 
 .table-container {
@@ -238,14 +239,15 @@ export default {
 }
 
 .input-length {
-    width: 90%; /* 你可以根据需要调整这个值 */
+    width: 90%;
+    /* 你可以根据需要调整这个值 */
 }
 
-.input-length-number{
+.input-length-number {
     width: 40%;
 }
 
-.dialogWidth{
+.dialogWidth {
     margin: auto;
     width: 50%;
 }

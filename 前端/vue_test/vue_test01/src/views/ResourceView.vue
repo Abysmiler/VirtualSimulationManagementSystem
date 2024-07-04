@@ -1,19 +1,19 @@
 <template>
     <div>
-        <el-input class="resource-input" placeholder="请输入资源名称" v-model="name" clearable></el-input>
+        <el-input class="resource-input" placeholder="请输入资源名称" v-model="resourceName" clearable></el-input>
         <el-button class="resource-btn" type="primary" plain @click="searchResources()">搜索</el-button>
-        <el-button v-if="user.type == '管理员'" class="resource-btn" icon="el-icon-circle-plus-outline"
+        <el-button v-if="user.userType == '管理员'" class="resource-btn" icon="el-icon-circle-plus-outline"
             @click="dialogAddVisible = true">新建</el-button>
         <el-dialog title="添加资源" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
-                <el-form-item label="ID" :label-width="formLabelWidth" prop="id">
-                    <el-input class="input-length" v-model="addform.id"></el-input>
+                <el-form-item label="资源ID" :label-width="formLabelWidth" prop="resourceId">
+                    <el-input class="input-length" v-model="addform.resourceId"></el-input>
                 </el-form-item>
                 <el-form-item label="资源名称" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.name"></el-input>
+                    <el-input class="input-length" v-model="addform.resourceName"></el-input>
                 </el-form-item>
                 <el-form-item label="类型" :label-width="formLabelWidth">
-                    <el-select v-model="addform.type" placeholder="请选择">
+                    <el-select v-model="addform.resourceType" placeholder="请选择">
                         <el-option label="音频" value="音频"></el-option>
                         <el-option label="视频" value="视频"></el-option>
                     </el-select>
@@ -26,20 +26,20 @@
         </el-dialog>
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="id" label="ID" width="120">
+                <el-table-column prop="resourceId" label="ID" width="120">
                 </el-table-column>
-                <el-table-column prop="name" label="资源名称" width="120">
+                <el-table-column prop="resourceName" label="资源名称" width="120">
                 </el-table-column>
-                <el-table-column prop="type" label="类型" width="120">
+                <el-table-column prop="resourceType" label="类型" width="120">
                 </el-table-column>
-                <el-table-column prop="create_time" label="创建时间" :formatter="formatDate">
+                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column prop="update_time" label="更新时间" :formatter="formatDate">
+                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.type == '管理员'">
+                <el-table-column label="操作" v-if="user.userType == '管理员'">
                     <template slot-scope="scope">
                         <el-button class="resource-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
-                        <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.id)">
+                        <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.resourceId)">
                             <el-button slot="reference" class="resource-btn" type="danger">删除</el-button>
                         </el-popconfirm>
                     </template>
@@ -48,18 +48,18 @@
             <el-dialog title="修改资源信息" :visible.sync="dialogFormVisible">
                 <el-form ref="editForm" :model="editform" :rules="rules">
                     <el-form-item label="资源名称" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.name" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.resourceName" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="类型" :label-width="formLabelWidth">
-                        <el-select v-model="editform.type" placeholder="请选择">
+                        <el-select v-model="editform.resourceType" placeholder="请选择">
                             <el-option label="音频" value="音频"></el-option>
                             <el-option label="视频" value="视频"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="confirmEdit()">确 定</el-button>
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -75,7 +75,7 @@ export default {
     data() {
         return {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
-            name: '',
+            resourceName: '',
             currentPage: 1,
             pageSize: 5,
             dialogFormVisible: false,
@@ -84,18 +84,18 @@ export default {
             pagedData: [],
             formLabelWidth: '120px',
             editform: {
-                name: '',
-                type: '',
-                update_time: '',  // 设置初始值为当前时间
+                resourceName: '',
+                resourceType: '',
+                resourceUpdateTime: '',  // 设置初始值为当前时间
             },
             addform: {
-                id: '',
-                name: '',
-                type: '音频',
-                create_time: '',
+                resourceId: '',
+                resourceName: '',
+                resourceType: '音频',
+                resourceCreateTime: '',
             },
             rules: {
-                id: [
+                resourceId: [
                     { required: true, message: '请输入序号', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '序号必须为正整数', trigger: 'blur' }
                 ]
@@ -105,7 +105,7 @@ export default {
     methods: {
         searchResources() {
             let params = {
-                name: this.name,
+                resourceName: this.resourceName,
             }
             request.get("/resource/searchResources", { params }).then(res => {
                 if (res.code == 0) {
@@ -116,8 +116,8 @@ export default {
                 }
             })
         },
-        del(id) {
-            request.delete('/resource/delete/' + id).then(res => {
+        del(resourceId) {
+            request.delete('/resource/delete/' + resourceId).then(res => {
                 if (res.code == 0) {
                     this.$message.success('删除成功');
                     this.searchResources(); // 更新表格数据
@@ -129,7 +129,7 @@ export default {
         addResource() {
             this.$refs.addForm.validate((valid) => {
                 if (!valid) return;
-                this.addform.create_time = new Date();
+                this.addform.resourceCreateTime = new Date();
                 request.post("/resource/addResource", this.addform).then(res => {
                     if (res.code == 0) {
                         this.$message.success('添加成功');
@@ -137,12 +137,12 @@ export default {
                         this.searchResources();
                         // 重置addform
                         this.addform = {
-                            id: '',
-                            name: '',
+                            resourceId: '',
+                            resourceName: '',
                             instructor_id: '',
                             resource_id: '',
                             schedule: '',
-                            create_time: '',
+                            resourceCreateTime: '',
                         };
                     } else {
                         this.$message.error(res.msg);
@@ -161,7 +161,7 @@ export default {
         confirmEdit() {
             this.$refs.editForm.validate((valid) => {
                 if (!valid) return;
-                this.editform.update_time = new Date();
+                this.editform.resourceUpdateTime = new Date();
                 request.post('/resource/update', this.editform).then(res => {
                     if (res.code == 0) {
                         this.$message.success("修改成功");
@@ -200,6 +200,7 @@ export default {
 .resource-btn {
     width: 80px;
     margin-right: 5px;
+    border-radius: 50px;
 }
 
 .table-container {

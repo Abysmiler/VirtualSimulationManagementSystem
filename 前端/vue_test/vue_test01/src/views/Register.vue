@@ -29,8 +29,8 @@
                         <el-form-item label="确认密码" prop="checkPass">
                             <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="用户类型" prop="type">
-                            <el-select v-model="ruleForm.type" placeholder="请选择用户类型">
+                        <el-form-item label="用户类型" prop="userType">
+                            <el-select v-model="ruleForm.userType" placeholder="请选择用户类型">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label"
                                     :value="item.value">
                                 </el-option>
@@ -135,7 +135,7 @@ export default {
                 phone: '',
                 password: '',
                 checkPass: '',
-                type: ''
+                userType: ''
             },
             rules: {
                 password: [
@@ -174,7 +174,7 @@ export default {
                     },
                     { validator: checkPhone, trigger: 'blur' }
                 ],
-                type: [
+                userType: [
                     { required: true, message: '用户类型不能为空' },
                     { validator: checkType, trigger: 'blur' }
                 ],

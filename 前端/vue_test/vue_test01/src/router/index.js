@@ -55,7 +55,7 @@ const routes = [
         //用户页面
         path: '/user',
         name: 'user',
-        component: UserView
+        component: UserView,
       },
       {
         //管理员页面
@@ -114,3 +114,4 @@ router.beforeEach((to,from,next) => {
 
 //导出路由
 export default router
+

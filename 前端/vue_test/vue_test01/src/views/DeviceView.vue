@@ -1,29 +1,29 @@
 <template>
     <div>
-        <el-input class="device-input" placeholder="请输入设备名称" v-model="name" clearable></el-input>
+        <el-input class="device-input" placeholder="请输入设备名称" v-model="simulationDeviceName" clearable></el-input>
         <el-button class="device-btn" type="primary" plain @click="searchDevices()">搜索</el-button>
-        <el-button v-if="user.type == '管理员'" class="device-btn" icon="el-icon-circle-plus-outline"
+        <el-button v-if="user.userType == '管理员'" class="device-btn" icon="el-icon-circle-plus-outline"
             @click="dialogAddVisible = true">新建</el-button>
         <el-dialog title="添加设备" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
-                <el-form-item label="序号" :label-width="formLabelWidth" prop="id">
-                    <el-input class="input-length" v-model="addform.id"></el-input>
+                <el-form-item label="序号" :label-width="formLabelWidth" prop="simulationDeviceId">
+                    <el-input class="input-length" v-model="addform.simulationDeviceId"></el-input>
                 </el-form-item>
                 <el-form-item label="设备名称" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.name"></el-input>
+                    <el-input class="input-length" v-model="addform.simulationDeviceName"></el-input>
                 </el-form-item>
                 <el-form-item label="所在实验室id" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.lab_id"></el-input>
+                    <el-input class="input-length" v-model="addform.labId"></el-input>
                 </el-form-item>
                 <el-form-item label="类型" :label-width="formLabelWidth">
-                    <el-select v-model="addform.type" placeholder="请选择">
+                    <el-select v-model="addform.simulationDeviceType" placeholder="请选择">
                         <el-option label="物理" value="物理"></el-option>
                         <el-option label="化学" value="化学"></el-option>
                         <el-option label="电子" value="电子"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-select v-model="addform.status" placeholder="请选择">
+                    <el-select v-model="addform.simulationDeviceStatus" placeholder="请选择">
                         <el-option label="良好" value="良好"></el-option>
                         <el-option label="一般" value="一般"></el-option>
                         <el-option label="合格" value="合格"></el-option>
@@ -37,24 +37,24 @@
         </el-dialog>
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="id" label="ID" width="120">
+                <el-table-column prop="simulationDeviceId" label="设备ID" width="120">
                 </el-table-column>
-                <el-table-column prop="name" label="设备名称" width="120">
+                <el-table-column prop="simulationDeviceName" label="设备名称" width="120">
                 </el-table-column>
-                <el-table-column prop="lab_id" label="所在实验室id" width="120">
+                <el-table-column prop="labId" label="所在实验室id" width="120">
                 </el-table-column>
-                <el-table-column prop="type" label="类型" width="120">
+                <el-table-column prop="simulationDeviceType" label="类型" width="120">
                 </el-table-column>
-                <el-table-column prop="status" label="状态" width="120">
+                <el-table-column prop="simulationDeviceStatus" label="状态" width="120">
                 </el-table-column>
-                <el-table-column prop="create_time" label="创建时间" :formatter="formatDate">
+                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column prop="update_time" label="更新时间" :formatter="formatDate">
+                <el-table-column prop="simulationDeviceUpdateTime" label="更新时间" :formatter="formatDate">
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.type == '管理员'">
+                <el-table-column label="操作" v-if="user.userType == '管理员'">
                     <template slot-scope="scope">
                         <el-button class="device-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
-                        <el-popconfirm title="是否删除该设备?" @confirm="del(scope.row.id)">
+                        <el-popconfirm title="是否删除该设备?" @confirm="del(scope.row.simulationDeviceId)">
                             <el-button slot="reference" class="device-btn" type="danger">删除</el-button>
                         </el-popconfirm>
                     </template>
@@ -62,24 +62,24 @@
             </el-table>
             <el-dialog title="修改设备信息" :visible.sync="dialogFormVisible">
                 <el-form ref="editForm" :model="editform" :rules="rules">
-                    <el-form-item label="序号" :label-width="formLabelWidth" prop="id">
-                        <el-input class="input-length" v-model="editform.id"></el-input>
+                    <el-form-item label="序号" :label-width="formLabelWidth" prop="simulationDeviceId">
+                        <el-input class="input-length" v-model="editform.simulationDeviceId"></el-input>
                     </el-form-item>
                     <el-form-item label="设备名称" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.name" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.simulationDeviceName" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="所在实验室id" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.lab_id"></el-input>
+                        <el-input class="input-length" v-model="editform.labId"></el-input>
                     </el-form-item>
                     <el-form-item label="类型" :label-width="formLabelWidth">
-                        <el-select v-model="editform.type" placeholder="请选择">
+                        <el-select v-model="editform.simulationDeviceType" placeholder="请选择">
                             <el-option label="物理" value="物理"></el-option>
                             <el-option label="化学" value="化学"></el-option>
                             <el-option label="电子" value="电子"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="状态" :label-width="formLabelWidth">
-                        <el-select v-model="editform.status" placeholder="请选择">
+                        <el-select v-model="editform.simulationDeviceStatus" placeholder="请选择">
                             <el-option label="良好" value="良好"></el-option>
                             <el-option label="一般" value="一般"></el-option>
                             <el-option label="合格" value="合格"></el-option>
@@ -104,7 +104,7 @@ export default {
     data() {
         return {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
-            name: '',
+            simulationDeviceName: '',
             currentPage: 1,
             pageSize: 5,
             dialogFormVisible: false,
@@ -113,23 +113,23 @@ export default {
             pagedData: [],
             formLabelWidth: '120px',
             editform: {
-                id: '',
-                name: '',
-                lab_id: '',
-                type: '',
-                status: '',
-                update_time: '',  // 设置初始值为当前时间
+                simulationDeviceId: '',
+                simulationDeviceName: '',
+                labId: '',
+                simulationDeviceType: '',
+                simulationDeviceStatus: '',
+                simulationDeviceUpdateTime: '',  // 设置初始值为当前时间
             },
             addform: {
-                id: '',
-                name: '',
-                lab_id: '',
-                type: '物理',
-                status: '良好',
-                create_time: '',
+                simulationDeviceId: '',
+                simulationDeviceName: '',
+                labId: '',
+                simulationDeviceType: '物理',
+                simulationDeviceStatus: '良好',
+                simulationDeviceCreateTime: '',
             },
             rules: {
-                id: [
+                simulationDeviceId: [
                     { required: true, message: '请输入序号', trigger: 'blur' },
                     { pattern: /^[1-9]\d*$/, message: '序号必须为正整数', trigger: 'blur' }
                 ]
@@ -139,7 +139,7 @@ export default {
     methods: {
         searchDevices() {
             let params = {
-                name: this.name,
+                simulationDeviceName: this.simulationDeviceName,
             }
             request.get("/device/searchDevices", { params }).then(res => {
                 if (res.code == 0) {
@@ -150,8 +150,8 @@ export default {
                 }
             })
         },
-        del(id) {
-            request.delete('/device/delete/' + id).then(res => {
+        del(simulationDeviceId) {
+            request.delete('/device/delete/' + simulationDeviceId).then(res => {
                 if (res.code == 0) {
                     this.$message.success('删除成功');
                     this.searchDevices(); // 更新表格数据
@@ -163,7 +163,7 @@ export default {
         addDevice() {
             this.$refs.addForm.validate((valid) => {
                 if (!valid) return;
-                this.addform.create_time = new Date();
+                this.addform.simulationDeviceCreateTime = new Date();
                 request.post("/device/addDevice", this.addform).then(res => {
                     if (res.code == 0) {
                         this.$message.success('添加成功');
@@ -171,11 +171,11 @@ export default {
                         this.searchDevices();
                         // 重置addform
                         this.addform = {
-                            id: '',
-                            name: '',
-                            type: '',
-                            status: '',
-                            create_time: '',
+                            simulationDeviceId: '',
+                            simulationDeviceName: '',
+                            simulationDeviceType: '',
+                            simulationDeviceStatus: '',
+                            simulationDeviceCreateTime: '',
                         };
                     } else {
                         this.$message.error(res.msg);
@@ -194,7 +194,7 @@ export default {
         confirmEdit() {
             this.$refs.editForm.validate((valid) => {
                 if (!valid) return;
-                this.editform.update_time = new Date();
+                this.editform.simulationDeviceUpdateTime = new Date();
                 request.post('/device/update', this.editform).then(res => {
                     if (res.code == 0) {
                         this.$message.success("修改成功");
@@ -233,6 +233,7 @@ export default {
 .device-btn {
     width: 80px;
     margin-right: 5px;
+    border-radius: 50px;
 }
 
 .table-container {

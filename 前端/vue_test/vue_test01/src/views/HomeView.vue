@@ -105,11 +105,13 @@ export default {
 }
 
 .footer {
-  background-color: #999;
-  color: white;
+  background-color: #0084ff3f;
+  color: rgb(255, 255, 255);
   text-align: center;
+  text-shadow: #d6d6d6 1px 1px 0;
   padding: 10px 0;
-  font-size: 10px;
+  font-size: 18px;
+  border-radius: 10px;
 }
 
 .header {

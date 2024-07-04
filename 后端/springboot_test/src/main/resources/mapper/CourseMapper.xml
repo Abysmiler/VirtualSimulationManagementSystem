@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lyj.mapper.CourseMapper">
+
+    <resultMap id="resultCourseMap" type="cn.lyj.entity.Course">
+        <result column="id" property="courseId"/>
+        <result column="name" property="courseName"/>
+        <result column="instructor_id" property="instructorId"/>
+        <result column="resource_id" property="resourceId"/>
+        <result column="credit_hour" property="creditHour"/>
+        <result column="create_time" property="courseCreateTime"/>
+        <result column="update_time" property="courseUpdateTime"/>
+        <result column="description" property="courseDescription"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="resultCourseMap">
+        select *
+        from courses
+        <where>
+            <if test="courseName != null and courseName != ''">
+                and name like concat('%',#{courseName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getCourseById" resultMap="resultCourseMap">
+        SELECT *
+        FROM courses
+        WHERE id = #{courseId}
+    </select>
+
+    <insert id="addCourse">
+        INSERT INTO courses
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">
+                id,
+            </if>
+            <if test="courseName != null">
+                name,
+            </if>
+            <if test="instructorId != null">
+                instructor_id,
+            </if>
+            <if test="resourceId != null">
+                resource_id,
+            </if>
+            <if test="creditHour != null">
+                credit_hour,
+            </if>
+            <if test="courseCreateTime != null">
+                create_time,
+            </if>
+            <if test="courseUpdateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">
+                #{courseId},
+            </if>
+            <if test="courseName != null">
+                #{courseName},
+            </if>
+            <if test="instructorId != null">
+                #{instructorId},
+            </if>
+            <if test="resourceId != null">
+                #{resourceId},
+            </if>
+            <if test="creditHour != null">
+                #{creditHour},
+            </if>
+            <if test="courseCreateTime != null">
+                #{courseCreateTime},
+            </if>
+            <if test="courseUpdateTime != null">
+                #{courseUpdateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCourse" >
+        update courses
+        <set>
+            <if test="courseName != null">name=#{courseName},</if>
+            <if test="instructorId != null">instructor_id=#{instructorId},</if>
+            <if test="resourceId != null">resource_id=#{resourceId},</if>
+            <if test="creditHour != null">credit_hour=#{creditHour},</if>
+            <if test="courseUpdateTime != null">update_time=#{courseUpdateTime},</if>
+        </set>
+        where id=#{courseId}
+    </update>
+
+    <delete id="deleteCourse">
+        DELETE FROM courses
+        WHERE id = #{courseId}
+    </delete>
+
+</mapper>
