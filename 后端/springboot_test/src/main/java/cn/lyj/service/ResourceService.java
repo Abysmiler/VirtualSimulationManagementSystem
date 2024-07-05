@@ -5,11 +5,11 @@ import cn.lyj.entity.Resource;
 import java.util.List;
 
 public interface ResourceService {
-    List<Resource> searchResources(String name);
+    List<Resource> searchResources(String resourceName);
 
     boolean updateResource(Resource resource);
 
-    boolean deleteResource(Integer id);
+    boolean deleteResource(Integer resourceId);
 
     boolean addResource(Resource resource);
 }

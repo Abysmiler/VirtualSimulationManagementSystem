@@ -14,7 +14,7 @@ public interface LabMapper {
 
     int addLab(Lab lab);
 
-    int deleteLab(Integer id);
+    int deleteLab(Integer labId);
 
-    Lab getLabById(Integer id);
+    Lab getLabById(Integer labId);
 }

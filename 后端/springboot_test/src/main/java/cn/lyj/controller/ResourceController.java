@@ -17,8 +17,8 @@ public class ResourceController {
     ResourceService resourceService;
 
     @GetMapping("/searchResources")
-    public Result searchResources(String name) {
-        List<Resource> resources = resourceService.searchResources(name);
+    public Result searchResources(String resourceName) {
+        List<Resource> resources = resourceService.searchResources(resourceName);
         return Result.success(resources);
     }
 
@@ -32,9 +32,9 @@ public class ResourceController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Result deleteResource(@PathVariable("id") Integer id) {
-        boolean deleted = resourceService.deleteResource(id);
+    @DeleteMapping("/delete/{resourceId}")
+    public Result deleteResource(@PathVariable("resourceId") Integer resourceId) {
+        boolean deleted = resourceService.deleteResource(resourceId);
         if (deleted) {
             return Result.success();
         } else {

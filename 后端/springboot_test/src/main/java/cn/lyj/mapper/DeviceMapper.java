@@ -12,9 +12,9 @@ public interface DeviceMapper {
 
     int updateDevice(Device device);
 
-    int deleteDevice(Integer id);
+    int deleteDevice(Integer simulationDeviceId);
 
-    Device getDeviceById(Integer id);
+    Device getDeviceById(Integer simulationDeviceId);
 
     int addDevice(Device device);
 }

@@ -15,8 +15,8 @@ public class LabServiceImpl implements LabService {
     LabMapper labMapper;
 
     @Override
-    public List<Lab> searchLabs(String name) {
-        List<Lab> list = labMapper.searchLabs(name);
+    public List<Lab> searchLabs(String labName) {
+        List<Lab> list = labMapper.searchLabs(labName);
         return list;
     }
 
@@ -34,13 +34,13 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
-    public boolean deleteLab(Integer id) {
-        return labMapper.deleteLab(id) > 0;
+    public boolean deleteLab(Integer labId) {
+        return labMapper.deleteLab(labId) > 0;
     }
 
     @Override
-    public boolean checkLabExists(Integer id) {
-        Lab lab = labMapper.getLabById(id);
+    public boolean checkLabExists(Integer labId) {
+        Lab lab = labMapper.getLabById(labId);
         return lab != null;
     }
 }

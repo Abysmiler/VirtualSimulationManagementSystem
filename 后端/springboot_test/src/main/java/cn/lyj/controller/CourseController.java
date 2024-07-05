@@ -28,8 +28,9 @@ public class CourseController {
 
     //    查询全部课程
     @GetMapping("/selectAll")
-    public Result selectAll(String name) {
-        List<Course> courses = courseService.selectAll(name);
+    public Result selectAll(String courseName) {
+        System.out.println(courseName);
+        List<Course> courses = courseService.selectAll(courseName);
         return Result.success(courses);
     }
 
@@ -53,9 +54,9 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Result deleteCourse(@PathVariable("id") Integer id) {
-        boolean deleted = courseService.deleteCourse(id);
+    @DeleteMapping("/delete/{courseId}")
+    public Result deleteCourse(@PathVariable("courseId") Integer courseId) {
+        boolean deleted = courseService.deleteCourse(courseId);
         if (deleted) {
             return Result.success();
         } else {

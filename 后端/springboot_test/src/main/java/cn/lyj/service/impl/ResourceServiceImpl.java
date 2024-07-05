@@ -15,8 +15,8 @@ public class ResourceServiceImpl implements ResourceService {
     ResourceMapper resourceMapper;
 
     @Override
-    public List<Resource> searchResources(String name) {
-        List<Resource> list = resourceMapper.searchResources(name);
+    public List<Resource> searchResources(String resourceName) {
+        List<Resource> list = resourceMapper.searchResources(resourceName);
         return list;
     }
 
@@ -26,8 +26,8 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public boolean deleteResource(Integer id) {
-        return resourceMapper.deleteResource(id) > 0;
+    public boolean deleteResource(Integer resourceId) {
+        return resourceMapper.deleteResource(resourceId) > 0;
     }
 
     @Override
@@ -38,8 +38,8 @@ public class ResourceServiceImpl implements ResourceService {
         return resourceMapper.addResource(resource) > 0;
     }
 
-    private boolean checkResourceExists(Integer id) {
-        Resource resource = resourceMapper.getResourceById(id);
+    private boolean checkResourceExists(Integer resourceId) {
+        Resource resource = resourceMapper.getResourceById(resourceId);
         return resource != null;
     }
 }
