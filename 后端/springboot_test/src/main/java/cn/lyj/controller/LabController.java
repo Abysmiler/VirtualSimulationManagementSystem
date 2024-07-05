@@ -17,8 +17,8 @@ public class LabController {
     LabService labService;
 
     @GetMapping("/searchLabs")
-    public Result searchLabs(String name) {
-        List<Lab> labs = labService.searchLabs(name);
+    public Result searchLabs(String labName) {
+        List<Lab> labs = labService.searchLabs(labName);
         return Result.success(labs);
     }
 
@@ -42,9 +42,9 @@ public class LabController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Result deleteLab(@PathVariable("id") Integer id) {
-        boolean deleted = labService.deleteLab(id);
+    @DeleteMapping("/delete/{labId}")
+    public Result deleteLab(@PathVariable("labId") Integer labId) {
+        boolean deleted = labService.deleteLab(labId);
         if (deleted) {
             return Result.success();
         } else {

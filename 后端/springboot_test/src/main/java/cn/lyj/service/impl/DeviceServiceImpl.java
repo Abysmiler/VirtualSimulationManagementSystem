@@ -15,8 +15,8 @@ public class DeviceServiceImpl implements DeviceService {
     DeviceMapper deviceMapper;
 
     @Override
-    public List<Device> searchDevice(String name) {
-        List<Device> list = deviceMapper.searchDevices(name);
+    public List<Device> searchDevice(String simulationDeviceName) {
+        List<Device> list = deviceMapper.searchDevices(simulationDeviceName);
         return list;
     }
 
@@ -27,8 +27,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public boolean deleteDevice(Integer id) {
-        return deviceMapper.deleteDevice(id) > 0;
+    public boolean deleteDevice(Integer simulationDeviceId) {
+        return deviceMapper.deleteDevice(simulationDeviceId) > 0;
     }
 
     @Override

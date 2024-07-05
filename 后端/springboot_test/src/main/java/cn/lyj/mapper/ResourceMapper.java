@@ -5,13 +5,13 @@ import cn.lyj.entity.Resource;
 import java.util.List;
 
 public interface ResourceMapper {
-    List<Resource> searchResources(String name);
+    List<Resource> searchResources(String resourceName);
 
     int updateResource(Resource resource);
 
-    int deleteResource(Integer id);
+    int deleteResource(Integer resourceId);
 
     int addResource(Resource resource);
 
-    Resource getResourceById(Integer id);
+    Resource getResourceById(Integer resourceId);
 }

@@ -5,13 +5,13 @@ import cn.lyj.entity.Lab;
 import java.util.List;
 
 public interface LabService {
-    List<Lab> searchLabs(String name);
+    List<Lab> searchLabs(String labName);
 
     boolean updateLab(Lab lab);
 
     boolean addLab(Lab lab);
 
-    boolean deleteLab(Integer id);
+    boolean deleteLab(Integer labId);
 
-    boolean checkLabExists(Integer id);
+    boolean checkLabExists(Integer labId);
 }

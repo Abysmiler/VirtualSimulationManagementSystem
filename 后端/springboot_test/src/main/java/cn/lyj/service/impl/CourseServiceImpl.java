@@ -14,8 +14,8 @@ public class CourseServiceImpl implements CourseService{
     @Autowired
     CourseMapper courseMapper;
 
-    public List<Course> selectAll(String name) {
-        List<Course> list = courseMapper.selectAll(name);
+    public List<Course> selectAll(String courseName) {
+        List<Course> list = courseMapper.selectAll(courseName);
         return list;
     }
 
@@ -36,8 +36,8 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public boolean deleteCourse(Integer id) {
-        return courseMapper.deleteCourse(id) > 0;
+    public boolean deleteCourse(Integer courseId) {
+        return courseMapper.deleteCourse(courseId) > 0;
     }
 
     private boolean checkCourseExists(Integer id) {

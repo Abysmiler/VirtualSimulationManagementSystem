@@ -17,8 +17,8 @@ public class DeviceController {
     DeviceService deviceService;
 
     @GetMapping("/searchDevices")
-    public Result searchDevices(String name) {
-        List<Device> devices = deviceService.searchDevice(name);
+    public Result searchDevices(String simulationDeviceName) {
+        List<Device> devices = deviceService.searchDevice(simulationDeviceName);
         return Result.success(devices);
     }
 
@@ -32,9 +32,9 @@ public class DeviceController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public Result deleteDevice(@PathVariable("id") Integer id) {
-        boolean deleted = deviceService.deleteDevice(id);
+    @DeleteMapping("/delete/{simulationDeviceId}")
+    public Result deleteDevice(@PathVariable("simulationDeviceId") Integer simulationDeviceId) {
+        boolean deleted = deviceService.deleteDevice(simulationDeviceId);
         if (deleted) {
             return Result.success();
         } else {
