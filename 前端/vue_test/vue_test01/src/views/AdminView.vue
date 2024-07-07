@@ -1,29 +1,54 @@
 <template>
     <div>
-        <el-input class="admin-input" placeholder="请输入姓名" v-model="name" clearable></el-input>
-        <el-input class="admin-input" placeholder="请输入电话" v-model="phone" clearable></el-input>
-        <el-button class="admin-btn" type="primary" plain @click="selectAllSuper()">搜索</el-button>
+        <div class="input-container">
+            <input class="input-linght" placeholder="请输入姓名" v-model="name">
+            <div class="highlight"></div>
+            <input class="input-linght" placeholder="请输入电话" v-model="phone">
+            <div class="highlight-1"></div>
+            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" @click="selectAllSuper()">搜索</el-button>
+        </div>
         <div class="table-container">
-            <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="id" label="ID" width="120">
-                </el-table-column>
-                <el-table-column prop="name" label="姓名" width="120">
-                </el-table-column>
-                <el-table-column prop="username" label="用户名" width="120">
-                </el-table-column>
-                <el-table-column prop="password" label="密码" width="120">
-                </el-table-column>
-                <el-table-column prop="email" label="邮箱" width="120">
-                </el-table-column>
-                <el-table-column prop="phone" label="手机号">
-                </el-table-column>
-                <el-table-column prop="userType" label="用户类型">
-                </el-table-column>
-                <el-table-column label="操作">
+            <el-table :data="pagedData" style="width: 100%" border>
+                <el-table-column prop="id" label="ID" width="100" align="center" header-align="center">
                     <template slot-scope="scope">
-                        <el-button class="admin-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.id }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="姓名" width="100" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.name }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="username" label="用户名" width="100" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.username }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="password" label="密码" width="100" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.password }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="email" label="邮箱" width="200" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.email }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="phone" label="手机号" width="150" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.phone }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="userType" label="用户类型" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <el-tag>{{ scope.row.userType }}</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该管理员?" @confirm="del(scope.row.id)">
-                            <el-button slot="reference" class="admin-btn" type="danger">删除</el-button>
+                            <el-button slot="reference" class="ctrl-btn del-btn" type="danger">删除</el-button>
                         </el-popconfirm>
                     </template>
                 </el-table-column>
@@ -40,8 +65,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmEdit()">确 定</el-button>
+                    <el-button @click="dialogFormVisible = false" class="btn">取 消</el-button>
+                    <el-button type="primary" @click="confirmEdit()" class="btn">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -63,7 +88,7 @@ export default {
             username: '',
             dialogFormVisible: false,
             currentPage: 1,//当前页
-            pageSize: 5, //每页显示5条数据
+            pageSize: 10, //每页显示5条数据
             tableData: [],//表格数据
             pagedData: [],//分页后的数据
             editform: {
@@ -141,30 +166,17 @@ export default {
 </script>
 
 <style scoped>
-.admin-input {
-    width: 10%;
-    margin-right: 10px;
+.highlight-1 {
+  position: absolute;
+  bottom: 0;
+  left: 17.5%;
+  width: 0;
+  height: 2px;
+  background-color: #409EFF;
+  transition: width 0.3s ease;
 }
 
-.admin-btn {
-    width: 80px;
-    margin-right: 5px;
-    border-radius: 50px;
-}
-
-.table-container {
-    height: 300px;
-    /*表格容器的高度*/
-    overflow: auto;
-}
-
-.pagination {
-    position: sticky;
-    top: 0;
-    text-align: center;
-}
-.dialogWidth{
-    margin: auto;
-    width: 50%;
+.input-linght:focus + .highlight-1 {
+  width: 14.6%;
 }
 </style>

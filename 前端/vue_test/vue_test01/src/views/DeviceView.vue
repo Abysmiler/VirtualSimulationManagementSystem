@@ -1,9 +1,12 @@
 <template>
     <div>
-        <el-input class="device-input" placeholder="请输入设备名称" v-model="simulationDeviceName" clearable></el-input>
-        <el-button class="device-btn" type="primary" plain @click="searchDevices()">搜索</el-button>
-        <el-button v-if="user.userType == '管理员'" class="device-btn" icon="el-icon-circle-plus-outline"
+        <div class="input-container">
+            <input class="input-linght" placeholder="请输入设备名称" v-model="simulationDeviceName">
+            <div class="highlight"></div>
+            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain @click="searchDevices()">搜索</el-button>
+            <el-button v-if="user.simulationDeviceType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
             @click="dialogAddVisible = true">新建</el-button>
+        </div>
         <el-dialog title="添加设备" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
                 <el-form-item label="序号" :label-width="formLabelWidth" prop="simulationDeviceId">
@@ -13,7 +16,7 @@
                     <el-input class="input-length" v-model="addform.simulationDeviceName"></el-input>
                 </el-form-item>
                 <el-form-item label="所在实验室id" :label-width="formLabelWidth">
-                    <el-input class="input-length" v-model="addform.labId"></el-input>
+                    <el-input class="input-length" v-model="addform.simulationDeviceLabId"></el-input>
                 </el-form-item>
                 <el-form-item label="类型" :label-width="formLabelWidth">
                     <el-select v-model="addform.simulationDeviceType" placeholder="请选择">
@@ -24,38 +27,52 @@
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
                     <el-select v-model="addform.simulationDeviceStatus" placeholder="请选择">
-                        <el-option label="良好" value="良好"></el-option>
-                        <el-option label="一般" value="一般"></el-option>
-                        <el-option label="合格" value="合格"></el-option>
+                        <el-option label="可用" value="可用"></el-option>
+                        <el-option label="维修中" value="维修中"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogAddVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addDevice">确 定</el-button>
+                <el-button @click="dialogAddVisible = false" class="btn">取 消</el-button>
+                <el-button type="primary" @click="addDevice" class="btn">确 定</el-button>
             </div>
         </el-dialog>
         <div class="table-container">
-            <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="simulationDeviceId" label="设备ID" width="120">
-                </el-table-column>
-                <el-table-column prop="simulationDeviceName" label="设备名称" width="120">
-                </el-table-column>
-                <el-table-column prop="labId" label="所在实验室id" width="120">
-                </el-table-column>
-                <el-table-column prop="simulationDeviceType" label="类型" width="120">
-                </el-table-column>
-                <el-table-column prop="simulationDeviceStatus" label="状态" width="120">
-                </el-table-column>
-                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate">
-                </el-table-column>
-                <el-table-column prop="simulationDeviceUpdateTime" label="更新时间" :formatter="formatDate">
-                </el-table-column>
-                <el-table-column label="操作" v-if="user.userType == '管理员'">
+            <el-table :data="pagedData" style="width: 100%" border>
+                <el-table-column prop="simulationDeviceId" label="ID" width="80" align="center" header-align="center">
                     <template slot-scope="scope">
-                        <el-button class="device-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="simulationDeviceName" label="设备名称" width="160" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="simulationDeviceLabId" label="所在实验室id" width="80" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceLabId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="simulationDeviceType" label="类型" width="160" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceType }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="simulationDeviceStatus" label="状态" width="120" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceStatus }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate" width="150" align="center" header-align="center">
+                </el-table-column>
+                <el-table-column prop="simulationDeviceUpdateTime" label="更新时间" :formatter="formatDate" align="center" header-align="center">
+                </el-table-column>
+                <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该设备?" @confirm="del(scope.row.simulationDeviceId)">
-                            <el-button slot="reference" class="device-btn" type="danger">删除</el-button>
+                            <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
                         </el-popconfirm>
                     </template>
                 </el-table-column>
@@ -69,7 +86,7 @@
                         <el-input class="input-length" v-model="editform.simulationDeviceName" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="所在实验室id" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.labId"></el-input>
+                        <el-input class="input-length" v-model="editform.simulationDeviceLabId"></el-input>
                     </el-form-item>
                     <el-form-item label="类型" :label-width="formLabelWidth">
                         <el-select v-model="editform.simulationDeviceType" placeholder="请选择">
@@ -80,15 +97,14 @@
                     </el-form-item>
                     <el-form-item label="状态" :label-width="formLabelWidth">
                         <el-select v-model="editform.simulationDeviceStatus" placeholder="请选择">
-                            <el-option label="良好" value="良好"></el-option>
-                            <el-option label="一般" value="一般"></el-option>
-                            <el-option label="合格" value="合格"></el-option>
+                            <el-option label="可用" value="可用"></el-option>
+                            <el-option label="维修中" value="维修中"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmEdit()">确 定</el-button>
+                    <el-button @click="dialogFormVisible = false" class="btn">取 消</el-button>
+                    <el-button type="primary" @click="confirmEdit()" class="btn">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -106,7 +122,7 @@ export default {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
             simulationDeviceName: '',
             currentPage: 1,
-            pageSize: 5,
+            pageSize: 10,
             dialogFormVisible: false,
             dialogAddVisible: false,
             tableData: [],
@@ -115,7 +131,7 @@ export default {
             editform: {
                 simulationDeviceId: '',
                 simulationDeviceName: '',
-                labId: '',
+                simulationDeviceLabId: '',
                 simulationDeviceType: '',
                 simulationDeviceStatus: '',
                 simulationDeviceUpdateTime: '',  // 设置初始值为当前时间
@@ -123,9 +139,9 @@ export default {
             addform: {
                 simulationDeviceId: '',
                 simulationDeviceName: '',
-                labId: '',
+                simulationDeviceLabId: '',
                 simulationDeviceType: '物理',
-                simulationDeviceStatus: '良好',
+                simulationDeviceStatus: '可用',
                 simulationDeviceCreateTime: '',
             },
             rules: {
@@ -225,35 +241,5 @@ export default {
 }
 </script>
 <style scoped>
-.device-input {
-    width: 12%;
-    margin-right: 10px;
-}
 
-.device-btn {
-    width: 80px;
-    margin-right: 5px;
-    border-radius: 50px;
-}
-
-.table-container {
-    height: 300px;
-    overflow: auto;
-}
-
-.pagination {
-    position: sticky;
-    top: 0;
-    text-align: center;
-}
-
-.input-length {
-    width: 90%;
-    /* 你可以根据需要调整这个值 */
-}
-
-.dialogWidth {
-    margin: auto;
-    width: 50%;
-}
 </style>

@@ -2,7 +2,7 @@
     <div>
         <el-descriptions class="margin-top" title="个人信息" :column="3" :size="size" border>
             <template slot="extra">
-                <el-button type="primary" size="small" @click="edit" class="userInfo-btn">编辑</el-button>
+                <el-button type="primary" size="small" @click="edit" class="ctrl-btn edit-btn">编辑</el-button>
             </template>
             <el-descriptions-item>
                 <template slot="label">
@@ -20,28 +20,28 @@
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-location-outline"></i>
+                    <i class="el-icon-message"></i>
                     邮箱
                 </template>
                 {{ user.email }}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-tickets"></i>
+                    <i class="el-icon-key"></i>
                     权限
                 </template>
                 <el-tag size="small">{{ user.userType }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-office-building"></i>
+                    <i class="el-icon-guide"></i>
                     性别
                 </template>
                 {{ user.sex }}
             </el-descriptions-item>
             <el-descriptions-item>
                 <template slot="label">
-                    <i class="el-icon-office-building"></i>
+                    <i class="el-icon-sort"></i>
                     年龄
                 </template>
                 {{ user.age }}
@@ -81,8 +81,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="confirmEdit">确定</el-button>
+                <el-button @click="dialogFormVisible = false" class="btn">取消</el-button>
+                <el-button type="primary" @click="confirmEdit" class="btn">确定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -155,10 +155,5 @@ export default {
   text-align: center;
 }
 
-.userInfo-btn{
-    width: 80px;
-    margin-right: 5px;
-    border-radius: 50px;
-}
 </style>
 
