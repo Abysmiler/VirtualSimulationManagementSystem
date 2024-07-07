@@ -1,188 +1,273 @@
 <!-- 登录界面 -->
 <template>
-    <div class="home">
-        <el-row type="flex" class="row-bg" justify="center">
-            <div class="bg-img"></div>
-            <el-col :span="2">
-                <div class="grid-content bg-purple"></div>
-            </el-col>
-            <el-col :span="10">
-                <div class="login-div">
-                    <!-- 登录表单 -->
-                    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px"
-                        class="login-form custom-label">
-                        <div style="text-align: center;">
-                            <h1>
-                                <pre>欢迎登录虚拟仿真实训教学管理
-    及资源共享平台管理系统</pre>
-                            </h1>
-                        </div>
-
-                        <el-form-item label="账户" prop="username">
-                            <el-input v-model="ruleForm.username"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="密码" prop="password">
-                            <el-input @keyup.enter.native="login('ruleForm')" type="password"
-                                v-model="ruleForm.password" autocomplete="off"></el-input>
-                        </el-form-item>
-
-                        <el-form-item class="login-btn" label-width="0">
-                            <el-button type="primary" @click="login('ruleForm')">登录</el-button>
-                            <el-button @click="toRegister()">注册</el-button>
-                        </el-form-item>
-                        <el-form-item style="text-align: center;">
-                            <a class="findpassword-link" style="margin-right: 17%;" @click="tofindpassword()">忘记密码?去找回</a>
-                        </el-form-item>
-                    </el-form>
+    <section>
+        <!-- 背景颜色 -->
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="box">
+            <!-- 登录框 -->
+            <div id="app" class="container">
+                <div class="form">
+                    <h2>登录</h2>
+                    <div class="inputBox">
+                        <input type="text" v-model="username" placeholder="账户" @blur="validateUsername">
+                        <p v-if="usernameError" class="error">账户名不能为空</p>
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" v-model="password" placeholder="密码" @blur="validatePassword"
+                            @keyup.enter="login">
+                        <p v-if="passwordError" class="error">密码长度在 6 到 12 个字符</p>
+                    </div>
+                    <div class="inputBox">
+                        <input type="submit" value="登录" @click.prevent="login">
+                    </div>
+                    <p class="forget">忘记密码?<a href="#" @click.prevent="tofindpassword">点击这里</a></p>
+                    <p class="forget">没有账户?<a href="#" @click.prevent="toRegister">注册</a></p>
                 </div>
-            </el-col>
-        </el-row>
-    </div>
+            </div>
+        </div>
+    </section>
 </template>
 
 <script>
-// 引入了组件
 import request from '@/utils/request';
-
 export default {
     data() {
-        // 自定义验证密码规则
-        var validatePass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('密码不能为空'));
-            } else {
-                if (this.ruleForm.checkPass !== '') {
-                    this.$refs.ruleForm.validateField('checkPass');
-                }
-                callback();
-            }
-        };
-
         return {
-            options: [{
-                value: 1,
-                label: '学生'
-            }, {
-                value: 2,
-                label: '教职工'
-            }, {
-                value: 3,
-                label: '实验室管理员'
-            }],
-            value: '',
-            ruleForm: {
-                username: '',
-                password: '',
-                userType: ''            },
-            rules: {
-                password: [
-                    {
-                        min: 6,
-                        max: 12,
-                        message: '长度在 6 到 12 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: validatePass, trigger: 'blur' },
-
-                ],
-                username: [
-                    { required: true, message: '账户名不能为空' }
-                ],
-            }
+            username: '',
+            password: '',
+            usernameError: false,
+            passwordError: false
         };
     },
     methods: {
-        login(formName) {
-            //刚刚的ref生效
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    //获取select选择器中label的值
-                    // let test1 = this.options.find(option => option.value ===  this.ruleForm.type);
-                    // console.log(test1.label);
-                    //如果校验用户输入的信息都正确,那么可以发送请求访问后台注册接口
-                    let params = {
-                        username: this.ruleForm.username,
-                        password: this.ruleForm.password,
-                        userType: this.ruleForm.userType
-                    }
-                    request.post('/user/login',params).then(res => {
-                        //code为0代表登录成功
-                        if (res.code == 0) {
-                            //弹窗提示用户登录成功
-                            this.$message.success("登录成功,即将跳转到后台首页")
-                            //登录成功得到用户的登录信息，将其保存在浏览器的本地存储中
-                            localStorage.setItem("user",JSON.stringify(res.data))
-                            //定时器，两秒后跳转页面
-                            setTimeout(() => {
-                                this.$router.push('/')
-                            }, 2000);
-                        } else {
-                            //code不为0代表失败，弹出提示信息
-                            let msg = res.msg
-                            this.$message.error(msg)
-                        }
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+        validateUsername() {
+            this.usernameError = this.username.trim() === '';
+        },
+        validatePassword() {
+            this.passwordError = this.password.length < 6 || this.password.length > 12;
+        },
+        login() {
+            this.validateUsername();
+            this.validatePassword();
+            if (!this.usernameError && !this.passwordError) {
+                let params = {
+                    username: this.username,
+                    password: this.password
                 }
-            });
+                request.post('/user/login', params).then(res => {
+                    if (res.code == 0) {
+                        this.$message.success("登录成功,即将跳转到后台首页")
+                        localStorage.setItem("user", JSON.stringify(res.data))
+                        setTimeout(() => {
+                            this.$router.push('/').catch(err => { })
+                        }, 2000);
+                    } else {
+                        let msg = res.msg
+                        this.$message.error(msg)
+                    }
+                })
+            }
         },
         toRegister() {
             this.$router.push('/register')
         },
-        tofindpassword() { 
+        tofindpassword() {
             this.$router.push('/findpassword')
         }
     }
 }
 </script>
 
-<style>
-button{
-    width: 120px;
-    /* height: 50px; */
-}
-.login-btn{
-    text-align: center;
-}
-.login-div {
-    /* 设置表单距浏览器上边距 */
-    margin-top: 20%;
-    width: 770px;
+<style scoped>
+/* 清除浏览器默认边距，
+使边框和内边距的值包含在元素的width和height内 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* 设置背景图片 */
-.bg-img {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* 使用flex布局，让内容垂直和水平居中 */
+
+section {
+    /* 相对定位 */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* linear-gradient() 函数用于创建一个表示两种或多种颜色线性渐变的图片 */
+    background: linear-gradient(to bottom, #f1f4f9, #dff1ff);
+}
+
+/* 背景颜色 */
+
+section .color {
+    /* 绝对定位 */
+    position: absolute;
+    /* 使用filter(滤镜) 属性，给图像设置高斯模糊*/
+    filter: blur(300px);
+}
+
+/* :nth-child(n) 选择器匹配父元素中的第 n 个子元素 */
+
+section .color:nth-child(1) {
+    top: -350px;
+    width: 700px;
+    height: 700px;
+    background: #409EFF;
+}
+
+section .color:nth-child(2) {
+    bottom: -150px;
+    left: 100px;
+    width: 700px;
+    height: 700px;
+    background: #409EFF;
+}
+
+section .color:nth-child(3) {
+    bottom: 50px;
+    right: 100px;
+    width: 700px;
+    height: 700px;
+    background: #409EFF;
+}
+
+.box {
+    position: relative;
+}
+/* 登录框样式 */
+
+.container {
+    position: relative;
+    border-radius: 15px;
+    width: 400px;
+    min-height: 400px;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    box-shadow: 25px 25px 25px rgb(13,83,255,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form {
+    position: relative;
     width: 100%;
     height: 100%;
-    background-image: url('../assets/loginbg.png');
-    background-size: cover;
-    background-position: center;
-    z-index: -10; /*层级 */
+    padding: 50px;
 }
 
-/* 设置表单背景色 */
-.login-form {
-    width: 80%;
-    padding: 30px;
-    /* 设置透明背景 */
-    background-color: rgba(255, 255, 255, 0.30);
-    border-radius: 14px;
-}
+/* 登录标题样式 */
 
-.custom-label .el-form-item__label {
-    /*设置标签文字颜色为白色 */
+.form h2 {
+    position: relative;
     color: #ffffff;
-}
-
-.findpassword-link{
-    color: #ffffff;
-    text-decoration: underline;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
     cursor: pointer;
+}
+
+/* 登录标题的下划线样式 */
+
+.form h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 0px;
+    height: 3px;
+    background: #409EFF;
+    transition: 0.5s;
+}
+
+.form h2:hover:before {
+    width: 24%;
+}
+
+.form .inputBox {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 30px; 
+}
+
+/* 输入框样式 */
+
+.form .inputBox input {
+    width: 100%;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    border: none;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form .inputBox input::placeholder {
+    color: #fff;
+}
+
+/* 登录按钮样式 */
+
+.form .inputBox input[type="submit"] {
+    background: #fff;
+    color: #666;
+    max-width: 100px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.forget {
+    margin-top: 6px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.forget a {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.inputBox {
+    position: relative;
+}
+
+.error {
+    position: absolute;
+    bottom: -20px;
+    left: 5%;
+    top: 110%;
+    color: rgb(255, 72, 72);
+    font-size: 12px;
+    animation: slideDown 0.5s ease-in-out;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>

@@ -48,13 +48,23 @@ import router from './router';
 
       <el-container>
         <el-header style="background-color: #1E90FF;">
+          <div class="current-time">{{ currentTime }}</div>
           <el-dropdown trigger="click"
             style="color: black; font-size: 16px; float: right; height:60px; line-height:60px">
             <span class="el-dropdown-link">
-              <!-- el-icon-user  用户图标 -->
-              <i class="el-icon-user header-user"></i>
-              <span class="header-user">{{ user.name }} {{ user.userType }}</span><i
-                class="el-icon-arrow-down el-icon--right header-user"></i>
+              <label class="hamburger">
+                <i class="el-icon-user header-user"></i>
+                <span class="header-user">
+                  {{ user.name }} {{ user.userType }}
+                </span>
+                <input type="checkbox">
+                <svg viewBox="0 0 32 32">
+                  <path class="line line-top-bottom"
+                    d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                  </path>
+                  <path class="line" d="M7 16 27 16"></path>
+                </svg>
+              </label>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
@@ -68,7 +78,7 @@ import router from './router';
         </el-header>
         <div class="wrapper">
           <el-main>
-              <router-view />
+            <router-view />
           </el-main>
         </div>
       </el-container>
@@ -81,10 +91,14 @@ export default {
   data() {
     return {
       //获取到当前登录用户的信息
-      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      currentTime: '',
     }
   },
-
+  created() {
+    this.updateTime();
+    setInterval(this.updateTime, 1000);
+  },
   methods: {
     //清除当前浏览器的登录状态信息
     loginout() {
@@ -105,11 +119,27 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-    }
+    },
+    updateTime() {
+      const date = new Date();
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+      this.currentTime = `${hours}:${minutes}:${seconds}`;
+    },
   }
 }
 </script>
 <style lang="less">
+.current-time {
+  font-size: 25px; // 设置大小
+  font-weight: bold; // 设置粗细
+  float: left; // 让时间显示在最左侧
+  line-height: 60px; // 垂直居中
+  padding-left: 10px; // 左侧留白
+  color: #FFFFFF; // 文字颜色
+}
+
 .myHeader {
   background-color: #2b2b2b;
 }
@@ -121,7 +151,7 @@ export default {
 .top-title {
   flex: 0.4;
   width: 100%;
-  height: 80px; 
+  height: 80px;
   border-right: 1px solid #e6e6e6;
 }
 
@@ -137,21 +167,79 @@ export default {
   font-weight: 550;
 }
 
-.header-user{
+.header-user {
   color: #FFFFFF;
+  position: relative;
+  top: -25%;
+  /* 调整上下位置 */
+  left: 0px;
+  /* 调整左右位置 */
+
+  /* 加粗字体 */
+  font-weight: bold;
 }
 
 .wrapper {
-  background-color: #dddcdc; /* 设置背景色为灰色 */
-  padding: 15px; /* 设置上下左右边距为10px */
-  min-height: 94vh; /* 设置最小高度为视口的高度 */
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg,
+      transparent 33.33%,
+      rgba(57, 144, 179, 0.1) 33.33%,
+      rgba(0, 0, 0, 0.1) 66.66%,
+      transparent 66.66%),
+    lightblue;
+  background-size: 20px 20px;
+  padding: 10px;
+  /* 设置上下左右边距为10px */
+  min-height: 92.4vh;
+  /* 设置最小高度为视口的高度 */
 }
 
 .el-main {
-  border-radius: 10px; /* 设置四角为圆角 */
-  background-color: #ffffff; /* 设置背景色为白色 */
-  min-height: calc(94vh - 30px); /* 设置最小高度为视口的高度减去上下边距 */
+  border-radius: 10px;
+  /* 设置四角为圆角 */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* 设置背景色为白色 */
+  min-height: calc(92.4vh - 80px);
+  overflow-y: auto;
 }
 
+.hamburger {
+  cursor: pointer;
+}
 
+.hamburger input {
+  display: none;
+}
+
+.hamburger svg {
+  /* The size of the SVG defines the overall size */
+  height: 3em;
+  /* Define the transition for transforming the SVG */
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line {
+  fill: none;
+  stroke: white;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  /* Define the transition for transforming the Stroke */
+  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+
+.hamburger input:checked+svg {
+  transform: rotate(-45deg);
+}
+
+.hamburger input:checked+svg .line-top-bottom {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42;
+}
 </style>

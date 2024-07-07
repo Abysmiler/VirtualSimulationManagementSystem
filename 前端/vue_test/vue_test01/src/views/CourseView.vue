@@ -1,9 +1,12 @@
 <template>
     <div>
-        <el-input class="course-input" placeholder="请输入课程名称" v-model="courseName" clearable></el-input>
-        <el-button class="course-btn" type="primary" plain @click="selectAll()">搜索</el-button>
-        <el-button v-if="user.userType == '管理员'" class="course-btn" icon="el-icon-circle-plus-outline"
+        <div class="input-container">
+            <input class="input-linght" placeholder="请输入课程名称" v-model="courseName">
+            <div class="highlight"></div>
+            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain @click="selectAll()">搜索</el-button>
+            <el-button v-if="user.userType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
             @click="dialogAddVisible = true">新建</el-button>
+        </div>
         <el-dialog title="添加课程" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
                 <el-form-item label="序号" :label-width="formLabelWidth" prop="courseId">
@@ -24,31 +27,46 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogAddVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addCourse">确 定</el-button>
+                <el-button @click="dialogAddVisible = false" class="btn">取 消</el-button>
+                <el-button type="primary" @click="addCourse" class="btn">确 定</el-button>
             </div>
         </el-dialog>
         <div class="table-container">
-            <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="courseId" label="课程ID" width="120">
-                </el-table-column>
-                <el-table-column prop="courseName" label="课程名称" width="120">
-                </el-table-column>
-                <el-table-column prop="instructorId" label="授课教师id" width="120">
-                </el-table-column>
-                <el-table-column prop="resourceId" label="课程资源id" width="120">
-                </el-table-column>
-                <el-table-column prop="creditHour" label="学时" width="120">
-                </el-table-column>
-                <el-table-column prop="courseCreateTime" label="创建时间" :formatter="formatDate">
-                </el-table-column>
-                <el-table-column prop="courseUpdateTime" label="更新时间" :formatter="formatDate">
-                </el-table-column>
-                <el-table-column label="操作" v-if="user.userType == '管理员'">
+            <el-table :data="pagedData" style="width: 100%" border>
+                <el-table-column prop="courseId" label="ID" width="80" align="center" header-align="center">
                     <template slot-scope="scope">
-                        <el-button class="course-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.courseId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="courseName" label="课程名称" width="160" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.courseName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="instructorId" label="授课教师id" width="120" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.instructorId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="resourceId" label="课程资源id" width="120" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="creditHour" label="学时" width="120" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.creditHour }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="courseCreateTime" label="创建时间" :formatter="formatDate" width="150" align="center" header-align="center">
+                </el-table-column>
+                <el-table-column prop="courseUpdateTime" label="更新时间" :formatter="formatDate" align="center" header-align="center">
+                </el-table-column>
+                <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该课程?" @confirm="del(scope.row.courseId)">
-                            <el-button slot="reference" class="course-btn" type="danger">删除</el-button>
+                            <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
                         </el-popconfirm>
                     </template>
                 </el-table-column>
@@ -70,8 +88,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmEdit()">确 定</el-button>
+                    <el-button @click="dialogFormVisible = false" class="btn">取 消</el-button>
+                    <el-button type="primary" @click="confirmEdit()" class="btn">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -89,7 +107,7 @@ export default {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
             courseName: '',
             currentPage: 1,
-            pageSize: 5,
+            pageSize: 10,
             dialogFormVisible: false,
             dialogAddVisible: false,
             tableData: [],
@@ -158,14 +176,14 @@ export default {
                     if (res.code == 0) {
                         this.$message.success('添加成功');
                         this.dialogAddVisible = false;
-                        this.selectAll();
+                        this.searchCourses();
                         // 重置addform
                         this.addform = {
                             courseId: '',
                             courseName: '',
                             instructorId: '',
                             resourceId: '',
-                            creditHour: '',
+                            credit_id: '',
                             courseCreateTime: '',
                         };
                     } else {
@@ -216,39 +234,6 @@ export default {
 }
 </script>
 <style scoped>
-.course-input {
-    width: 12%;
-    margin-right: 10px;
-}
 
-.course-btn {
-    width: 80px;
-    margin-right: 5px;
-    border-radius: 50px;
-}
 
-.table-container {
-    height: 300px;
-    overflow: auto;
-}
-
-.pagination {
-    position: sticky;
-    top: 0;
-    text-align: center;
-}
-
-.input-length {
-    width: 90%;
-    /* 你可以根据需要调整这个值 */
-}
-
-.input-length-number {
-    width: 40%;
-}
-
-.dialogWidth {
-    margin: auto;
-    width: 50%;
-}
 </style>

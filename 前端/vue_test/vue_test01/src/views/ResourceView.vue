@@ -1,12 +1,15 @@
 <template>
     <div>
-        <el-input class="resource-input" placeholder="请输入资源名称" v-model="resourceName" clearable></el-input>
-        <el-button class="resource-btn" type="primary" plain @click="searchResources()">搜索</el-button>
-        <el-button v-if="user.userType == '管理员'" class="resource-btn" icon="el-icon-circle-plus-outline"
+        <div class="input-container">
+            <input class="input-linght" placeholder="请输入资源名称" v-model="resourceName">
+            <div class="highlight"></div>
+            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain @click="searchResources()">搜索</el-button>
+            <el-button v-if="user.resourceType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
             @click="dialogAddVisible = true">新建</el-button>
+        </div>
         <el-dialog title="添加资源" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
-                <el-form-item label="资源ID" :label-width="formLabelWidth" prop="resourceId">
+                <el-form-item label="ID" :label-width="formLabelWidth" prop="resourceId">
                     <el-input class="input-length" v-model="addform.resourceId"></el-input>
                 </el-form-item>
                 <el-form-item label="资源名称" :label-width="formLabelWidth">
@@ -20,27 +23,36 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogAddVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addResource">确 定</el-button>
+                <el-button @click="dialogAddVisible = false" class="btn">取 消</el-button>
+                <el-button type="primary" @click="addResource" class="btn">确 定</el-button>
             </div>
         </el-dialog>
         <div class="table-container">
-            <el-table :data="pagedData" style="width: 100%">
-                <el-table-column prop="resourceId" label="ID" width="120">
-                </el-table-column>
-                <el-table-column prop="resourceName" label="资源名称" width="120">
-                </el-table-column>
-                <el-table-column prop="resourceType" label="类型" width="120">
-                </el-table-column>
-                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate">
-                </el-table-column>
-                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate">
-                </el-table-column>
-                <el-table-column label="操作" v-if="user.userType == '管理员'">
+            <el-table :data="pagedData" style="width: 100%" border>
+                <el-table-column prop="resourceId" label="ID" width="80" align="center" header-align="center">
                     <template slot-scope="scope">
-                        <el-button class="resource-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceId }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="resourceName" label="资源名称" width="160" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceName }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="resourceType" label="类型" width="120" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceType }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" align="center" header-align="center">
+                </el-table-column>
+                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" align="center" header-align="center">
+                </el-table-column>
+                <el-table-column label="操作" v-if="user.userType == '管理员'"  align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.resourceId)">
-                            <el-button slot="reference" class="resource-btn" type="danger">删除</el-button>
+                            <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
                         </el-popconfirm>
                     </template>
                 </el-table-column>
@@ -58,8 +70,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="confirmEdit()">确 定</el-button>
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button @click="dialogFormVisible = false" class="btn">取 消</el-button>
+                    <el-button type="primary" @click="confirmEdit()" class="btn">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -77,7 +89,7 @@ export default {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
             resourceName: '',
             currentPage: 1,
-            pageSize: 5,
+            pageSize: 10,
             dialogFormVisible: false,
             dialogAddVisible: false,
             tableData: [],
@@ -192,35 +204,5 @@ export default {
 }
 </script>
 <style scoped>
-.resource-input {
-    width: 12%;
-    margin-right: 10px;
-}
 
-.resource-btn {
-    width: 80px;
-    margin-right: 5px;
-    border-radius: 50px;
-}
-
-.table-container {
-    height: 300px;
-    overflow: auto;
-}
-
-.pagination {
-    position: sticky;
-    top: 0;
-    text-align: center;
-}
-
-.input-length {
-    width: 90%;
-    /* 你可以根据需要调整这个值 */
-}
-
-.dialogWidth {
-    margin: auto;
-    width: 50%;
-}
 </style>
