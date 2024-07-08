@@ -69,6 +69,30 @@ body {
     transition: all 0.5s;
 }
 
+.in-btn:hover {
+    color: #409EFF;
+}
+
+.in-btn:after {
+    content: "";
+    background: white;
+    position: absolute;
+    z-index: -1;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+}
+
+.in-btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+
 .del-btn:hover {
     color: #F56C6C;
 }
@@ -132,6 +156,7 @@ body {
 
 .input-container {
     position: relative;
+    display: flex;
 }
 
 .input-linght {

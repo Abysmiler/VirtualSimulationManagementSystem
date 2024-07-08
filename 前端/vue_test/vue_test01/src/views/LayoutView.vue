@@ -198,12 +198,7 @@ export default {
 .wrapper {
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg,
-      transparent 33.33%,
-      rgba(57, 144, 179, 0.1) 33.33%,
-      rgba(0, 0, 0, 0.1) 66.66%,
-      transparent 66.66%),
-    lightblue;
+  background: rgba(30,144,255);
   background-size: 20px 20px;
   padding: 10px;
   /* 设置上下左右边距为10px */
@@ -214,7 +209,7 @@ export default {
 .el-main {
   border-radius: 10px;
   /* 设置四角为圆角 */
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255);
   /* 设置背景色为白色 */
   min-height: calc(92.4vh - 80px);
   overflow-y: auto;

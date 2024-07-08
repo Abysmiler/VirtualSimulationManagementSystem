@@ -182,42 +182,8 @@ section {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* linear-gradient() 函数用于创建一个表示两种或多种颜色线性渐变的图片 */
-    background: linear-gradient(to bottom, #f1f4f9, #dff1ff);
-}
-
-/* 背景颜色 */
-
-section .color {
-    /* 绝对定位 */
-    position: absolute;
-    /* 使用filter(滤镜) 属性，给图像设置高斯模糊*/
-    filter: blur(300px);
-}
-
-/* :nth-child(n) 选择器匹配父元素中的第 n 个子元素 */
-
-section .color:nth-child(1) {
-    top: -350px;
-    width: 700px;
-    height: 700px;
-    background: #409EFF;
-}
-
-section .color:nth-child(2) {
-    bottom: -150px;
-    left: 100px;
-    width: 700px;
-    height: 700px;
-    background: #409EFF;
-}
-
-section .color:nth-child(3) {
-    bottom: 50px;
-    right: 100px;
-    width: 700px;
-    height: 700px;
-    background: #409EFF;
+    /* 背景颜色 */
+    background-color: rgb(128, 192, 255);
 }
 
 .box {

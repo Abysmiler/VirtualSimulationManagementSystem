@@ -57,25 +57,25 @@
 
         <el-dialog title="编辑个人信息" :visible.sync="dialogFormVisible">
             <el-form :model="editform">
-                <el-form-item label="用户名" >&nbsp;&nbsp;&nbsp;
+                <el-form-item label="用户名">&nbsp;&nbsp;&nbsp;
                     <el-input class="input-length" v-model="editform.username" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号" >&nbsp;&nbsp;&nbsp;
+                <el-form-item label="手机号">&nbsp;&nbsp;&nbsp;
                     <el-input class="input-length" v-model="editform.phone" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <el-form-item label="邮箱">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <el-input class="input-length" v-model="editform.email" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="联系地址" >
+                <el-form-item label="联系地址">
                     <el-input class="input-length" v-model="editform.address" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="性别">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <el-select v-model="editform.sex" placeholder="请选择性别" class="select-sex">
-                            <el-option label="男" value="男"></el-option>
-                            <el-option label="女" value="女"></el-option>
+                        <el-option label="男" value="男"></el-option>
+                        <el-option label="女" value="女"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="年龄" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <el-form-item label="年龄">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <el-input-number class="input-length-number" v-model="editform.age" :min="0" :step="1"
                         controls-position="right"></el-input-number>
                 </el-form-item>
@@ -98,12 +98,12 @@ export default {
             size: 'medium',
             dialogFormVisible: false,
             editform: {
-                username:'',
-                phone:'',
-                email:'',
-                address:'',
-                sex:'',
-                age:''
+                username: '',
+                phone: '',
+                email: '',
+                address: '',
+                sex: '',
+                age: ''
             }
         };
     },
@@ -113,20 +113,20 @@ export default {
             this.dialogFormVisible = true; // 打开编辑弹出框
         },
         confirmEdit() {
-    //发送请求，修改对应的用户信息
-    request.post('/user/update', this.editform).then(res => {
-        if (res.code == 0) {
-            this.$message.success("修改成功");
-            // 更新本地存储的用户信息
-            localStorage.setItem('user', JSON.stringify(this.editform));
-            // 更新当前用户信息
-            this.user = Object.assign({}, this.editform);
-        } else {
-            this.$message.error("修改失败");
-        }
-    })
-    this.dialogFormVisible = false
-},
+            //发送请求，修改对应的用户信息
+            request.post('/user/update', this.editform).then(res => {
+                if (res.code == 0) {
+                    this.$message.success("修改成功");
+                    // 更新本地存储的用户信息
+                    localStorage.setItem('user', JSON.stringify(this.editform));
+                    // 更新当前用户信息
+                    this.user = Object.assign({}, this.editform);
+                } else {
+                    this.$message.error("修改失败");
+                }
+            })
+            this.dialogFormVisible = false
+        },
     },
     mounted() {
         // 可以在这里进行更多的初始化操作
@@ -143,17 +143,15 @@ export default {
     width: 80%;
 }
 
-.input-length-number{
+.input-length-number {
     width: 25%;
 }
 
-.sex-input{
+.sex-input {
     text-align: center;
 }
 
 .select-sex .el-input__inner {
-  text-align: center;
+    text-align: center;
 }
-
 </style>
-

@@ -7,15 +7,17 @@
                 @click="searchDevices()">搜索</el-button>
             <el-button v-if="user.userType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
                 @click="dialogAddVisible = true">新建</el-button>
-            <el-button class="add-btn" type="primary" icon="el-icon-download" plain @click="exportData()">导出</el-button>
-            <!-- <el-button class="add-btn" type="primary" icon="el-icon-upload" plain @click="importData()">导入</el-button> -->
-            <el-upload action="http://localhost:8080/api/device/upload" :on-success="successUpload">
-                <el-button type="primary">批量导入</el-button>
-            </el-upload>
             <el-button v-if="user.userType == '管理员'" class="add-btn"
                 :class="{ 'confirm-btn btn': isSelectMode && selectedRows.length > 0 }" @click="toggleSelectMode">
                 {{ isSelectMode ? (selectedRows.length > 0 ? '删除' : '取消') : '选择' }}
             </el-button>
+            <el-button class="add-btn" type="primary" icon="el-icon-download" plain @click="exportData()">导出</el-button>
+        </div>
+        <div class="local-btn">
+            <el-upload action="http://localhost:8080/api/device/upload" :on-success="successUpload">
+                <el-button class="add-btn" style="margin-left: 10px;" type="primary"
+                    icon="el-icon-upload2">导入</el-button>
+            </el-upload>
         </div>
         <el-dialog title="添加设备" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
@@ -63,7 +65,7 @@
                             }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceLabId" label="所在实验室id" width="80" align="center"
+                <el-table-column prop="simulationDeviceLabId" label="所在实验室id" width="100" align="center"
                     header-align="center">
                     <template slot-scope="scope">
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceLabId
@@ -84,7 +86,7 @@
                             }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate" width="150"
+                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate" width="180"
                     align="center" header-align="center">
                 </el-table-column>
                 <el-table-column prop="simulationDeviceUpdateTime" label="更新时间" :formatter="formatDate" align="center"
@@ -308,4 +310,10 @@ export default {
     }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.local-btn{
+    width: 9%;
+    margin-left: 48.8%;
+    margin-top: -2.7%;
+}
+</style>
