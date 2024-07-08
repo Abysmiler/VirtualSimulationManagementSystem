@@ -3,6 +3,7 @@ package cn.lyj.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.Alias;
 
 import java.util.Date;
 
@@ -32,5 +33,7 @@ public class Resource {
    private Date resourceUpdateTime;
    //实训资源描述
    private String resourceDescription;
+   //备注（资源时间戳）
+   private String remark;
 
 }

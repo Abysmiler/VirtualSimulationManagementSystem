@@ -176,7 +176,7 @@ export default {
                     if (res.code == 0) {
                         this.$message.success('添加成功');
                         this.dialogAddVisible = false;
-                        this.searchCourses();
+                        this.selectAll();
                         // 重置addform
                         this.addform = {
                             courseId: '',

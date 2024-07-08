@@ -13,14 +13,13 @@ import router from './router';
             <i class="el-icon-menu"></i>
             <span slot="title">系统首页</span>
           </el-menu-item>
-          <el-submenu index="2" v-if="user.userType != '学生'">
+          <el-submenu index="2" v-if="user.userType != '学生' && user.userType != '超级管理员'">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/admin" v-if="user.userType == '超级管理员'">管理员信息</el-menu-item>
-              <el-menu-item index="/user" v-if="user.userType != '超级管理员'">用户信息</el-menu-item>
+              <el-menu-item index="/user">用户信息</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">
@@ -40,7 +39,24 @@ import router from './router';
             </template>
             <el-menu-item-group>
               <el-menu-item index="/lab">实验室信息</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="5">
+            <template slot="title">
+              <i class="el-icon-printer"></i>
+              <span>仿真设备管理</span>
+            </template>
+            <el-menu-item-group>
               <el-menu-item index="/device">设备信息</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-submenu index="6"  v-if="user.userType == '超级管理员'">
+            <template slot="title">
+              <i class="el-icon-unlock"></i>
+              <span>权限管理</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/admin">权限信息</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

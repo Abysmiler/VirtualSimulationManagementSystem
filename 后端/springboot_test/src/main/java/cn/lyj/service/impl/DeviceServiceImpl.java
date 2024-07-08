@@ -21,6 +21,12 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    public List<Device> searchDevice() {
+        List<Device> list = deviceMapper.searchDevices();
+        return list;
+    }
+
+    @Override
     public boolean updateDevice(Device device) {
         int result = deviceMapper.updateDevice(device);
         return result > 0;
@@ -47,4 +53,15 @@ public class DeviceServiceImpl implements DeviceService {
         // 如果设备存在，返回true
         return device != null;
     }
+
+    @Override
+    public boolean deleteDevices(List<Integer> simulationDeviceIds) {
+        for (Integer id : simulationDeviceIds) {
+            if (!deleteDevice(id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

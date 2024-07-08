@@ -46,6 +46,29 @@ body {
     transition: all 0.5s;
 }
 
+.out-btn:hover {
+    color: #67c23a;
+}
+
+.out-btn:after {
+    content: "";
+    background: white;
+    position: absolute;
+    z-index: -1;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+}
+
+.out-btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
 .del-btn:hover {
     color: #F56C6C;
 }

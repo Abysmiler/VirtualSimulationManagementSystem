@@ -70,6 +70,7 @@
             <if test="resourceName != null">name=#{resourceName},</if>
             <if test="resourceType != null">type=#{resourceType},</if>
             <if test="resourceUpdateTime != null">update_time=#{resourceUpdateTime},</if>
+            <if test="remark != null">remark=#{remark},</if>
         </set>
         where id=#{resourceId}
     </update>

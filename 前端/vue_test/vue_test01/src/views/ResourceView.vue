@@ -3,9 +3,10 @@
         <div class="input-container">
             <input class="input-linght" placeholder="请输入资源名称" v-model="resourceName">
             <div class="highlight"></div>
-            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain @click="searchResources()">搜索</el-button>
-            <el-button v-if="user.resourceType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
-            @click="dialogAddVisible = true">新建</el-button>
+            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain
+                @click="searchResources()">搜索</el-button>
+            <el-button v-if="user.userType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
+                @click="dialogAddVisible = true">新建</el-button>
         </div>
         <el-dialog title="添加资源" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
@@ -44,16 +45,29 @@
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceType }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" align="center" header-align="center">
+                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" align="center"
+                    header-align="center">
                 </el-table-column>
-                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" align="center" header-align="center">
+                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" align="center"
+                    header-align="center">
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.userType == '管理员'"  align="center" header-align="center">
+                <el-table-column prop="remark" label="备注" width="160" align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.remark }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
                     <template slot-scope="scope">
                         <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.resourceId)">
                             <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
                         </el-popconfirm>
+                        <el-button class="ctrl-btn out-btn el-icon-download" type="success"
+                            @click="downloadResource(scope.row.remark)">下载</el-button>
+                        <el-upload action="http://localhost:8080/api/files/upload"
+                            :on-success="(res) => successUpload(res, scope.row)">
+                            <el-button type="primary">上传</el-button>
+                        </el-upload>
                     </template>
                 </el-table-column>
             </el-table>
@@ -83,11 +97,13 @@
 </template>
 <script>
 import request from '@/utils/request'
+
 export default {
     data() {
         return {
             user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},
             resourceName: '',
+            // remark: '', //资源时间戳
             currentPage: 1,
             pageSize: 10,
             dialogFormVisible: false,
@@ -99,6 +115,7 @@ export default {
                 resourceName: '',
                 resourceType: '',
                 resourceUpdateTime: '',  // 设置初始值为当前时间
+                remark: '',
             },
             addform: {
                 resourceId: '',
@@ -170,20 +187,64 @@ export default {
             this.dialogFormVisible = true
             this.editform = row
         },
-        confirmEdit() {
-            this.$refs.editForm.validate((valid) => {
-                if (!valid) return;
+        // successUpload(res, row) {
+        //     console.log(res);
+        //     // 找到对应的资源数据并更新其 remark 字段
+        //     const resource = this.tableData.find(item => item.resourceId === row.resourceId);
+        //     if (resource) {
+        //         resource.remark = res.data;
+        //         // 手动触发重新渲染表格
+        //         this.pagedData = [...this.pagedData];
+        //         // 调用 confirmEdit 方法，将更新后的数据同步到后端
+        //         // this.confirmEdit();
+        //     }
+        // },
+        successUpload(res, row) {
+            console.log(res);
+            // 找到对应的资源数据并更新其 remark 字段
+            const resource = this.tableData.find(item => item.resourceId === row.resourceId);
+            if (resource) {
+                resource.remark = res.data;
+                // 手动触发重新渲染表格
+                this.pagedData = [...this.pagedData];
+
+                // 更新 editform 中的数据
+                this.editform.resourceName = resource.resourceName;
+                this.editform.resourceType = resource.resourceType;
                 this.editform.resourceUpdateTime = new Date();
-                request.post('/resource/update', this.editform).then(res => {
-                    if (res.code == 0) {
-                        this.$message.success("修改成功");
-                        this.dialogFormVisible = false
-                    } else {
-                        this.$message.error(res.msg);
-                    }
-                })
+
+                // 调用 confirmEdit 方法，将更新后的数据同步到后端
+                this.confirmEdit();
+            }
+        },
+
+        //文件下载
+        downloadResource(flag) {
+            location.href = 'http://localhost:8080/api/files/' + flag
+        },
+
+        confirmEdit() {
+            this.$nextTick(() => {
+                this.$refs.editForm.validate((valid) => {
+                    if (!valid) return;
+                    // 更新修改时间
+                    this.editform.resourceUpdateTime = new Date();
+
+                    // 发送更新请求到后端
+                    request.post('/resource/update', this.editform).then(res => {
+                        if (res.code == 0) {
+                            this.$message.success("修改成功");
+                            this.dialogFormVisible = false;
+                        } else {
+                            this.$message.error(res.msg);
+                        }
+                    });
+                });
             });
         },
+
+
+
         handleSizeChange(val) {
             this.pageSize = val;
             this.handlePagination();
@@ -203,6 +264,4 @@ export default {
     }
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
