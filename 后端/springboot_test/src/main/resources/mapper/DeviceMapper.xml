@@ -92,4 +92,12 @@
         WHERE id = #{simulationDeviceId}
     </delete>
 
+    <delete id="deleteDevices">
+        DELETE FROM devices
+        WHERE id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
 </mapper>

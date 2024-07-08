@@ -5,7 +5,7 @@
             <div class="highlight"></div>
             <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain
                 @click="searchLabs()">搜索</el-button>
-            <el-button v-if="user.type == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
+            <el-button v-if="user.userTypeype == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
                 @click="dialogAddVisible = true">新建</el-button>
         </div>
         <el-dialog title="添加实验室" :visible.sync="dialogAddVisible">

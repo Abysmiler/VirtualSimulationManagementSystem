@@ -3,9 +3,19 @@
         <div class="input-container">
             <input class="input-linght" placeholder="请输入设备名称" v-model="simulationDeviceName">
             <div class="highlight"></div>
-            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain @click="searchDevices()">搜索</el-button>
-            <el-button v-if="user.simulationDeviceType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
-            @click="dialogAddVisible = true">新建</el-button>
+            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain
+                @click="searchDevices()">搜索</el-button>
+            <el-button v-if="user.userType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
+                @click="dialogAddVisible = true">新建</el-button>
+            <el-button class="add-btn" type="primary" icon="el-icon-download" plain @click="exportData()">导出</el-button>
+            <!-- <el-button class="add-btn" type="primary" icon="el-icon-upload" plain @click="importData()">导入</el-button> -->
+            <el-upload action="http://localhost:8080/api/device/upload" :on-success="successUpload">
+                <el-button type="primary">批量导入</el-button>
+            </el-upload>
+            <el-button v-if="user.userType == '管理员'" class="add-btn"
+                :class="{ 'confirm-btn btn': isSelectMode && selectedRows.length > 0 }" @click="toggleSelectMode">
+                {{ isSelectMode ? (selectedRows.length > 0 ? '删除' : '取消') : '选择' }}
+            </el-button>
         </div>
         <el-dialog title="添加设备" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">
@@ -38,35 +48,47 @@
             </div>
         </el-dialog>
         <div class="table-container">
-            <el-table :data="pagedData" style="width: 100%" border>
+            <el-table :data="pagedData" style="width: 100%" border :row-key="row => row.simulationDeviceId"
+                :span-method="isSelectMode ? spanMethod : null" @selection-change="handleSelectionChange">
+                <el-table-column type="selection" width="55" v-if="isSelectMode"></el-table-column>
                 <el-table-column prop="simulationDeviceId" label="ID" width="80" align="center" header-align="center">
                     <template slot-scope="scope">
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceId }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceName" label="设备名称" width="160" align="center" header-align="center">
+                <el-table-column prop="simulationDeviceName" label="设备名称" width="160" align="center"
+                    header-align="center">
                     <template slot-scope="scope">
-                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceName }}</span>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceName
+                            }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceLabId" label="所在实验室id" width="80" align="center" header-align="center">
+                <el-table-column prop="simulationDeviceLabId" label="所在实验室id" width="80" align="center"
+                    header-align="center">
                     <template slot-scope="scope">
-                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceLabId }}</span>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceLabId
+                            }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceType" label="类型" width="160" align="center" header-align="center">
+                <el-table-column prop="simulationDeviceType" label="类型" width="160" align="center"
+                    header-align="center">
                     <template slot-scope="scope">
-                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceType }}</span>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceType
+                            }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceStatus" label="状态" width="120" align="center" header-align="center">
+                <el-table-column prop="simulationDeviceStatus" label="状态" width="120" align="center"
+                    header-align="center">
                     <template slot-scope="scope">
-                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceStatus }}</span>
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.simulationDeviceStatus
+                            }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate" width="150" align="center" header-align="center">
+                <el-table-column prop="simulationDeviceCreateTime" label="创建时间" :formatter="formatDate" width="150"
+                    align="center" header-align="center">
                 </el-table-column>
-                <el-table-column prop="simulationDeviceUpdateTime" label="更新时间" :formatter="formatDate" align="center" header-align="center">
+                <el-table-column prop="simulationDeviceUpdateTime" label="更新时间" :formatter="formatDate" align="center"
+                    header-align="center">
                 </el-table-column>
                 <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
                     <template slot-scope="scope">
@@ -83,7 +105,8 @@
                         <el-input class="input-length" v-model="editform.simulationDeviceId"></el-input>
                     </el-form-item>
                     <el-form-item label="设备名称" :label-width="formLabelWidth">
-                        <el-input class="input-length" v-model="editform.simulationDeviceName" autocomplete="off"></el-input>
+                        <el-input class="input-length" v-model="editform.simulationDeviceName"
+                            autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="所在实验室id" :label-width="formLabelWidth">
                         <el-input class="input-length" v-model="editform.simulationDeviceLabId"></el-input>
@@ -116,6 +139,8 @@
 </template>
 <script>
 import request from '@/utils/request'
+import * as XLSX from 'xlsx';
+
 export default {
     data() {
         return {
@@ -128,6 +153,8 @@ export default {
             tableData: [],
             pagedData: [],
             formLabelWidth: '120px',
+            isSelectMode: false,
+            selectedRows: [],
             editform: {
                 simulationDeviceId: '',
                 simulationDeviceName: '',
@@ -153,6 +180,47 @@ export default {
         }
     },
     methods: {
+        // 导出数据
+        exportData() {
+            // let user = localStorage.getItem("user");
+            // location.href = 'http://localhost:8080/api/device/export?token=' + JSON.parse(user).token
+            location.href = 'http://localhost:8080/api/device/export'
+        },
+        //    导入数据
+        successUpload(res) {
+            if (res.code === '0') {
+                this.$message.success(res.msg)
+                this.searchDevices()
+            }else {
+                this.$message.error(res.msg);
+            }
+        },
+        toggleSelectMode() {
+            if (this.isSelectMode && this.selectedRows.length > 0) {
+                this.deleteSelectedRows();
+            } else {
+                this.isSelectMode = !this.isSelectMode;
+                this.selectedRows = [];
+            }
+        },
+        deleteSelectedRows() {
+            const simulationDeviceIds = this.selectedRows.map(row => row.simulationDeviceId).join(',');
+            request.delete('/device/deleteDevices/' + simulationDeviceIds).then(res => {
+                if (res.code == 0) {
+                    this.$message.success('删除成功');
+                    this.searchDevices(); // 更新表格数据
+                    this.isSelectMode = false;
+                } else {
+                    this.$message.error(res.msg);
+                }
+            })
+        },
+        // handleSelectionChange(selectedRows) {
+        //     this.selectedRows = selectedRows;
+        // },
+        handleSelectionChange(selected) {
+            this.selectedRows = selected;
+        },
         searchDevices() {
             let params = {
                 simulationDeviceName: this.simulationDeviceName,
@@ -240,6 +308,4 @@ export default {
     }
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

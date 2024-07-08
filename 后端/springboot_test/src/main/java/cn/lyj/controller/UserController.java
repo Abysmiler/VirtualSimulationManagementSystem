@@ -159,12 +159,7 @@ public class UserController {
         List<User> users = userService.selectAllSuper(name, phone);
         return Result.success(users);
     }
-//
-//    @GetMapping("/selectByCondition")
-//    public Result selectByCondition(User user) {
-//        List<User> users = userService.selectByCondition(user);
-//        return Result.success(users);
-//    }
+
     @PostMapping("/findpassword")
     public Result findPassword(@RequestBody Map<String, String> requestMap) {
         String email = requestMap.get("email");//邮箱

@@ -21,9 +21,7 @@
             <div class="inputBox">
               <input type="submit" value="确认重置" @click.prevent="resetPassword">
             </div>
-            <p class="forget">
-              <a href="#" @click.prevent="backToLogin">返回登录</a>
-            </p>
+              <p class="forget">放弃重置?<a href="#" @click.prevent="backToLogin">点击返回</a></p>
           </div>
         </div>
       </div>

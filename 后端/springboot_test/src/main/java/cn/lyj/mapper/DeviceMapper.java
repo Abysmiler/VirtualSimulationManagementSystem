@@ -10,6 +10,8 @@ import java.util.List;
 public interface DeviceMapper {
     List<Device> searchDevices(@Param("simulationDeviceName") String simulationDeviceName);
 
+    List<Device> searchDevices();
+
     int updateDevice(Device device);
 
     int deleteDevice(Integer simulationDeviceId);
@@ -17,4 +19,6 @@ public interface DeviceMapper {
     Device getDeviceById(Integer simulationDeviceId);
 
     int addDevice(Device device);
+
+    int deleteDevices(int[] simulationDeviceIds);
 }

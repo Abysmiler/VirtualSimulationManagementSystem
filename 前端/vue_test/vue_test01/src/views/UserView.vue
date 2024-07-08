@@ -6,11 +6,28 @@
             <div class="highlight"></div>
             <input class="input-linght" placeholder="请输入电话" v-model="phone">
             <div class="highlight-1"></div>
-            <el-button class="confirm-btn btn" plain @click="selectAll()" type="primary" icon="el-icon-search">搜索</el-button>
+            <el-button class="confirm-btn btn" plain @click="selectAll()" type="primary"
+                icon="el-icon-search">搜索</el-button>
         </div>
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100% " border>
-                <el-table-column prop="id" label="ID" width="100" align="center" header-align="center">
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand"
+                            style="display: flex; flex-direction: column;">
+                            <el-form-item label="年龄" style="margin-left: 20px;">
+                                <span>{{ props.row.age }}</span>
+                            </el-form-item>
+                            <el-form-item label="性别" style="margin-left: 20px;">
+                                <span>{{ props.row.sex }}</span>
+                            </el-form-item>
+                            <el-form-item label="联系地址" style="margin-left: 20px;">
+                                <span>{{ props.row.address }}</span>
+                            </el-form-item>
+                        </el-form>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="id" label="ID" width="80" align="center" header-align="center">
                     <template slot-scope="scope">
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.id }}</span>
                     </template>
@@ -37,7 +54,7 @@
                 </el-table-column>
                 <el-table-column prop="phone" label="手机号" width="150" align="center" header-align="center">
                     <template slot-scope="scope">
-                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.phone }}</span> 
+                        <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.phone }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="userType" label="用户类型" align="center" header-align="center">
@@ -45,7 +62,7 @@
                         <el-tag>{{ scope.row.userType }}</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.userType == '管理员'"  align="center" header-align="center">
+                <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
                     <template slot-scope="scope">
                         <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
                         <el-popconfirm title="是否删除该用户?" @confirm="del(scope.row.id)">
@@ -85,12 +102,8 @@
                 </div>
             </el-dialog>
         </div>
-        <el-pagination class="pagination"   
-            @size-change="handleSizeChange" 
-            @current-change="handleCurrentChange"
-            :current-page="currentPage" 
-            :page-size="pageSize" 
-            layout="total, prev, pager, next, jumper"
+        <el-pagination class="pagination" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next, jumper"
             :total="tableData.length">
         </el-pagination>
     </div>
@@ -204,8 +217,22 @@ export default {
   transition: width 0.3s ease;
 }
 
-.input-linght:focus + .highlight-1 {
-  width: 14.6%;
+.input-linght:focus+.highlight-1 {
+    width: 14.6%;
 }
 
+.demo-table-expand {
+    font-size: 0;
+}
+
+.demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+}
+
+.demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+}
 </style>

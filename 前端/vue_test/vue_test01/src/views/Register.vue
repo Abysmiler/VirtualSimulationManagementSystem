@@ -374,7 +374,7 @@ section .color:nth-child(3) {
     position: absolute;
     bottom: -20px;
     left: 5%;
-    top: 110%;
+    top: 106%;
     color: rgb(255, 72, 72);
     font-size: 12px;
     animation: slideDown 0.5s ease-in-out;
