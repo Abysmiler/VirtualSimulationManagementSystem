@@ -18,8 +18,10 @@
                 </el-form-item>
                 <el-form-item label="类型" :label-width="formLabelWidth">
                     <el-select v-model="addform.resourceType" placeholder="请选择">
-                        <el-option label="音频" value="音频"></el-option>
-                        <el-option label="视频" value="视频"></el-option>
+                        <el-option label="PPT" value="PPT"></el-option>
+                        <el-option label="WORD" value="WORD"></el-option>
+                        <el-option label="EXCEL" value="EXCEL"></el-option>
+                        <el-option label="PDF" value="PDF"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -45,29 +47,27 @@
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceType }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" align="center"
-                    header-align="center">
+                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" width="300"
+                    align="center" header-align="center">
                 </el-table-column>
-                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" align="center"
-                    header-align="center">
+                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" width="300"
+                    align="center" header-align="center">
                 </el-table-column>
-                <el-table-column prop="remark" label="备注" width="160" align="center" header-align="center">
+                <el-table-column prop="remark" label="备注" align="center" header-align="center">
                     <template slot-scope="scope">
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.remark }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
                     <template slot-scope="scope">
-                        <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
-                        <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.resourceId)">
-                            <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
-                        </el-popconfirm>
-                        <el-button class="ctrl-btn out-btn el-icon-download" type="success"
-                            @click="downloadResource(scope.row.remark)">下载</el-button>
-                        <el-upload action="http://localhost:8080/api/files/upload"
-                            :on-success="(res) => successUpload(res, scope.row)">
-                            <el-button type="primary">上传</el-button>
-                        </el-upload>
+                        <div class="button-container">
+                            <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
+                            <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.resourceId)">
+                                <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
+                            </el-popconfirm>
+                            <el-button class="ctrl-btn out-btn el-icon-download" type="success"
+                                @click="downloadResource(scope.row.remark)">下载</el-button>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -78,10 +78,16 @@
                     </el-form-item>
                     <el-form-item label="类型" :label-width="formLabelWidth">
                         <el-select v-model="editform.resourceType" placeholder="请选择">
-                            <el-option label="音频" value="音频"></el-option>
-                            <el-option label="视频" value="视频"></el-option>
+                            <el-option label="PPT" value="PPT"></el-option>
+                            <el-option label="WORD" value="WORD"></el-option>
+                            <el-option label="EXCEL" value="EXCEL"></el-option>
+                            <el-option label="PDF" value="PDF"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-upload action="http://localhost:8080/api/files/upload"
+                        :on-success="(res) => successUpload(res, currentRow)" class="  local">
+                        <el-button class="ctrl-btn in-btn el-icon-upload" type="primary">上传</el-button>
+                    </el-upload>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false" class="btn">取 消</el-button>
@@ -111,6 +117,7 @@ export default {
             tableData: [],
             pagedData: [],
             formLabelWidth: '120px',
+            currentRow: null,
             editform: {
                 resourceName: '',
                 resourceType: '',
@@ -120,7 +127,7 @@ export default {
             addform: {
                 resourceId: '',
                 resourceName: '',
-                resourceType: '音频',
+                resourceType: 'PDF',
                 resourceCreateTime: '',
             },
             rules: {
@@ -186,6 +193,7 @@ export default {
         edit(row) {
             this.dialogFormVisible = true
             this.editform = row
+            this.currentRow = row
         },
         // successUpload(res, row) {
         //     console.log(res);
@@ -214,7 +222,7 @@ export default {
                 this.editform.resourceUpdateTime = new Date();
 
                 // 调用 confirmEdit 方法，将更新后的数据同步到后端
-                this.confirmEdit();
+                //this.confirmEdit();
             }
         },
 
@@ -264,4 +272,17 @@ export default {
     }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.button-container>*:not(:last-child) {
+    margin-right: 10px;
+}
+
+.local {
+    margin-left: 13%;
+}
+</style>
