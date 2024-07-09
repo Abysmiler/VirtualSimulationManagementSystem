@@ -183,7 +183,7 @@ section {
     align-items: center;
     min-height: 100vh;
     /* 背景颜色 */
-    background-color: rgb(128, 192, 255);
+    background-color: rgb(0, 125, 251);
 }
 
 .box {

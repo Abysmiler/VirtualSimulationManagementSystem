@@ -313,7 +313,7 @@ export default {
 <style scoped>
 .local-btn{
     width: 9%;
-    margin-left: 48.8%;
-    margin-top: -2.7%;
+    margin-left: 43.8%;
+    margin-top: -2.4%;
 }
 </style>

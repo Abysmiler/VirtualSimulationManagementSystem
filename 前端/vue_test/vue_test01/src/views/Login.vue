@@ -101,7 +101,7 @@ section {
     align-items: center;
     min-height: 100vh;
     /* 背景颜色 */
-    background-color: rgb(128, 192, 255);
+    background-color: rgb(0, 125, 251);
 }
 
 
@@ -175,7 +175,7 @@ section {
 .form .inputBox input {
     width: 100%;
     padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgb(255, 255, 255);
     outline: none;
     border: none;
     border-radius: 30px;

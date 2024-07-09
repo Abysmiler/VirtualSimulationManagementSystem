@@ -211,7 +211,7 @@ export default {
   /* 设置四角为圆角 */
   background-color: rgba(255, 255, 255);
   /* 设置背景色为白色 */
-  min-height: calc(92.4vh - 80px);
+  min-height: calc(100vh - 80px);
   overflow-y: auto;
 }
 
