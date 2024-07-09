@@ -148,10 +148,10 @@ export default {
 </script>
 <style lang="less">
 .current-time {
-  font-size: 25px; // 设置大小
+  font-size: 30px; // 设置大小
   font-weight: bold; // 设置粗细
   float: left; // 让时间显示在最左侧
-  line-height: 60px; // 垂直居中
+  line-height: 70px; // 垂直居中
   padding-left: 10px; // 左侧留白
   color: #FFFFFF; // 文字颜色
 }

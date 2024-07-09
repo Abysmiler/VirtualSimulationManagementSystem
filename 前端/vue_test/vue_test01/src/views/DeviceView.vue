@@ -11,9 +11,9 @@
                 :class="{ 'confirm-btn btn': isSelectMode && selectedRows.length > 0 }" @click="toggleSelectMode">
                 {{ isSelectMode ? (selectedRows.length > 0 ? '删除' : '取消') : '选择' }}
             </el-button>
-            <el-button class="add-btn" type="primary" icon="el-icon-download" plain @click="exportData()">导出</el-button>
+            <el-button v-if="user.userType == '管理员'" class="add-btn" type="primary" icon="el-icon-download" plain @click="exportData()">导出</el-button>
         </div>
-        <div class="local-btn">
+        <div class="local-btn" v-if="user.userType == '管理员'">
             <el-upload action="http://localhost:8080/api/device/upload" :on-success="successUpload">
                 <el-button class="add-btn" style="margin-left: 10px;" type="primary"
                     icon="el-icon-upload2">导入</el-button>
@@ -184,8 +184,6 @@ export default {
     methods: {
         // 导出数据
         exportData() {
-            // let user = localStorage.getItem("user");
-            // location.href = 'http://localhost:8080/api/device/export?token=' + JSON.parse(user).token
             location.href = 'http://localhost:8080/api/device/export'
         },
         //    导入数据

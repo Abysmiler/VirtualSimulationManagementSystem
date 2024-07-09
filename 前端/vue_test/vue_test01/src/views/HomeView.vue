@@ -3,12 +3,13 @@
     <el-container class="container">
       <!-- 定义头部 -->
       <el-main class="main">
+        <div class="home-title" >欢迎使用虚拟仿真管理系统</div>
         <el-tabs>
           <el-tab-pane  >
             <!-- 使用el-carousel组件实现轮播图  
                   :interval="3000"表示3000毫秒也就是3秒后跳转下一张图片
             -->
-            <el-carousel :interval="3000" height="45vh" type="card">
+            <el-carousel :interval="3000" height="50vh" type="card">
               <!-- v-for:遍历数组  
                    item:是一个在v-for循环中迭代的变量 
                    dormitoryImages:data中定义的数组
@@ -26,7 +27,7 @@
     <!-- 定义尾部 -->
     <el-footer class="footer">
       说明:本网页由本公司自行开发编写,如有需要请联系我们
-      <br />备案号:京2341572
+      <br />备案号:京123456
     </el-footer>
   </div>
 </template>
@@ -43,17 +44,6 @@ export default {
         require("@/assets/主页4.jpg")
         /* 宿舍场景图片链接数组 */
       ]
-      // teachingImages: [
-      //   /* 教学场景图片链接数组 */
-      //   "https://img0.baidu.com/it/u=1862198944,2714928797&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=321",
-      //   "https://img2.baidu.com/it/u=2001347590,3549401043&fm=253&fmt=auto&app=120&f=JPEG?w=541&h=301"
-      // ],
-      // parkImages: [
-      //   /* 公园场景图片链接数组 */
-      // ],
-      // canteenImages: [
-      //   /* 食堂场景图片链接数组 */
-      // ]
     };
   }
 };
@@ -75,10 +65,11 @@ export default {
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 50vh;
 }
 
 .main {
+  margin-top: 30px;
   height: 80vh;
 }
 
@@ -100,7 +91,7 @@ export default {
 .nav {
   display: flex;
   justify-content: flex-end;
-  height: 60px;
+  height: px;
   line-height: 60px;
 }
 
@@ -125,5 +116,11 @@ export default {
 .nav-link:hover {
   font-size: 1.2em;
   color: #eee;
+}
+
+.home-title {
+  color: rgb(46, 139, 237);
+  font-size: 42px;
+  font-weight: 550;
 }
 </style>
