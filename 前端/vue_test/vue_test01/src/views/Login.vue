@@ -1,10 +1,10 @@
 <!-- 登录界面 -->
 <template>
     <section>
-        <!-- 背景颜色 -->
-        <div class="color"></div>
-        <div class="color"></div>
-        <div class="color"></div>
+        <div class="top-title-login">
+            <img src="@/assets/logo-2.png" style="width: 90px; height: 90px; position:absolute;left:30px;top:5px;">
+            <p style="position:absolute;left:150px;top:30px;color:white;font-size:35px; font-weight: 550; color: #ffff;">欢迎来到虚拟仿真管理系统</p>
+        </div>
         <div class="box">
             <!-- 登录框 -->
             <div id="app" class="container">
@@ -22,8 +22,8 @@
                     <div class="inputBox">
                         <input type="submit" value="登录" @click.prevent="login">
                     </div>
-                    <p class="forget">忘记密码?<a href="#" @click.prevent="tofindpassword">点击这里</a></p>
-                    <p class="forget">没有账户?<a href="#" @click.prevent="toRegister">注册</a></p>
+                    <p class="forget">忘记密码? <a href="#" @click.prevent="tofindpassword">点击这里</a></p>
+                    <p class="forget">没有账户? <a href="#" @click.prevent="toRegister">注册</a></p>
                 </div>
             </div>
         </div>
@@ -90,6 +90,12 @@ export default {
     box-sizing: border-box;
 }
 
+.top-title-login {
+  flex: 0.4;
+  width: 100%;
+  height: 80px;
+}
+
 /* 使用flex布局，让内容垂直和水平居中 */
 
 section {
@@ -97,17 +103,19 @@ section {
     position: relative;
     overflow: hidden;
     display: flex;
-    justify-content: center;
     align-items: center;
     min-height: 100vh;
     /* 背景颜色 */
-    background-color: rgb(0, 125, 251);
+    background-color: rgba(3, 111, 244, 0.804);
 }
 
 
 
 .box {
-    position: relative;
+    display: flex;
+    margin-left: 13.2%;
+    align-items: center;
+    height: 100vh;
 }
 /* 登录框样式 */
 
@@ -175,7 +183,7 @@ section {
 .form .inputBox input {
     width: 100%;
     padding: 10px 20px;
-    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.2);
     outline: none;
     border: none;
     border-radius: 30px;

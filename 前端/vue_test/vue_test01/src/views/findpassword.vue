@@ -101,7 +101,7 @@
       align-items: center;
       min-height: 100vh;
     /* 背景颜色 */
-    background-color: rgb(0, 125, 251);
+    background-color:rgba(3, 111, 244, 0.804);
   }
 
   
