@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="input-container">
-            <input class="input-linght" placeholder="请输入设备名称" v-model="simulationDeviceName">
+            <input class="input-linght" style="height: 40px;" placeholder="请输入设备名称" v-model="simulationDeviceName">
             <div class="highlight"></div>
-            <el-button class="confirm-btn btn" type="primary" icon="el-icon-search" plain
+            <el-button class="confirm-btn btn" style="height: 40px;" type="primary" icon="el-icon-search" plain
                 @click="searchDevices()">搜索</el-button>
             <el-button v-if="user.userType == '管理员'" class="add-btn" icon="el-icon-circle-plus-outline"
                 @click="dialogAddVisible = true">新建</el-button>
@@ -11,9 +11,8 @@
                 :class="{ 'confirm-btn btn': isSelectMode && selectedRows.length > 0 }" @click="toggleSelectMode">
                 {{ isSelectMode ? (selectedRows.length > 0 ? '删除' : '取消') : '选择' }}
             </el-button>
-            <el-button v-if="user.userType == '管理员'" class="add-btn" type="primary" icon="el-icon-download" plain @click="exportData()">导出</el-button>
-        </div>
-        <div class="local-btn" v-if="user.userType == '管理员'">
+            <el-button v-if="user.userType == '管理员'" class="add-btn" type="primary" icon="el-icon-download" plain
+                @click="exportData()">导出</el-button>
             <el-upload action="http://localhost:8080/api/device/upload" :on-success="successUpload">
                 <el-button class="add-btn" style="margin-left: 10px;" type="primary"
                     icon="el-icon-upload2">导入</el-button>
@@ -32,9 +31,9 @@
                 </el-form-item>
                 <el-form-item label="类型" :label-width="formLabelWidth">
                     <el-select v-model="addform.simulationDeviceType" placeholder="请选择">
-                        <el-option label="物理" value="物理"></el-option>
-                        <el-option label="化学" value="化学"></el-option>
-                        <el-option label="电子" value="电子"></el-option>
+                        <el-option label="计算机仿真系统" value="计算机仿真系统"></el-option>
+                        <el-option label="机械仿真设备" value="机械仿真设备"></el-option>
+                        <el-option label="电子仿真设备" value="电子仿真设备"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
@@ -52,6 +51,16 @@
         <div class="table-container">
             <el-table :data="pagedData" style="width: 100%" border :row-key="row => row.simulationDeviceId"
                 :span-method="isSelectMode ? spanMethod : null" @selection-change="handleSelectionChange">
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand"
+                            style="display: flex; flex-direction: column;">
+                            <el-form-item label="设备描述：" style="margin-left: 20px;">
+                                <span>{{ props.row.simulationDeviceDescription }}</span>
+                            </el-form-item>
+                        </el-form>
+                    </template>
+                </el-table-column>
                 <el-table-column type="selection" width="55" v-if="isSelectMode"></el-table-column>
                 <el-table-column prop="simulationDeviceId" label="ID" width="80" align="center" header-align="center">
                     <template slot-scope="scope">
@@ -115,9 +124,9 @@
                     </el-form-item>
                     <el-form-item label="类型" :label-width="formLabelWidth">
                         <el-select v-model="editform.simulationDeviceType" placeholder="请选择">
-                            <el-option label="物理" value="物理"></el-option>
-                            <el-option label="化学" value="化学"></el-option>
-                            <el-option label="电子" value="电子"></el-option>
+                            <el-option label="计算机仿真系统" value="计算机仿真系统"></el-option>
+                            <el-option label="机械仿真设备" value="机械仿真设备"></el-option>
+                            <el-option label="电子仿真设备" value="电子仿真设备"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="状态" :label-width="formLabelWidth">
@@ -169,7 +178,7 @@ export default {
                 simulationDeviceId: '',
                 simulationDeviceName: '',
                 simulationDeviceLabId: '',
-                simulationDeviceType: '物理',
+                simulationDeviceType: '',
                 simulationDeviceStatus: '可用',
                 simulationDeviceCreateTime: '',
             },
@@ -189,9 +198,9 @@ export default {
         //    导入数据
         successUpload(res) {
             if (res.code === '0') {
-                this.$message.success(res.msg)
+                this.$message.success("导入成功")
                 this.searchDevices()
-            }else {
+            } else {
                 this.$message.error(res.msg);
             }
         },
@@ -208,16 +217,13 @@ export default {
             request.delete('/device/deleteDevices/' + simulationDeviceIds).then(res => {
                 if (res.code == 0) {
                     this.$message.success('删除成功');
-                    this.searchDevices(); // 更新表格数据
                     this.isSelectMode = false;
+                    location.reload(); // 更新表格数据
                 } else {
                     this.$message.error(res.msg);
                 }
             })
         },
-        // handleSelectionChange(selectedRows) {
-        //     this.selectedRows = selectedRows;
-        // },
         handleSelectionChange(selected) {
             this.selectedRows = selected;
         },
@@ -309,9 +315,5 @@ export default {
 }
 </script>
 <style scoped>
-.local-btn{
-    width: 9%;
-    margin-left: 43.8%;
-    margin-top: -2.4%;
-}
+
 </style>

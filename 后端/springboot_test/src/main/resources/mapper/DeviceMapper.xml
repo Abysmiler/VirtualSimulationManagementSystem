@@ -36,6 +36,10 @@
             <if test="simulationDeviceCreateTime != null">
                 create_time,
             </if>
+            <if test="simulationDeviceDescription != null">
+                description,
+            </if>
+
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="simulationDeviceId != null">
@@ -55,6 +59,9 @@
             </if>
             <if test="simulationDeviceCreateTime != null">
                 #{simulationDeviceCreateTime},
+            </if>
+            <if test="simulationDeviceDescription != null">
+                #{simulationDeviceDescription},
             </if>
         </trim>
     </insert>

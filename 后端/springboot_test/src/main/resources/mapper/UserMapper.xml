@@ -91,14 +91,6 @@
         WHERE id = #{id}
     </delete>
 
-    <delete id="delByIds">
-        DELETE FROM users
-        WHERE id IN
-        <foreach collection="ids" item="id" separator="," open="(" close=")">
-            #{id}
-        </foreach>
-    </delete>
-
     <update id="updateUser" parameterType="cn.lyj.entity.User">
         UPDATE users
         <set>

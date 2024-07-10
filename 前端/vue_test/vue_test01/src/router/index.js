@@ -9,7 +9,7 @@ import LoginView from '../views/Login.vue'
 import AdminView from '../views/AdminView.vue'
 import LabView from '@/views/LabView.vue'
 import CourseView from '@/views/CourseView.vue'
-import findpassword from '@/views/findpassword.vue'
+import FindPassword from '@/views/FindPassword.vue'
 import ResourceView from '@/views/ResourceView.vue'
 import UserInfoView from '@/views/UserInfoView.vue'
 import DeviceView from '@/views/DeviceView.vue'
@@ -33,7 +33,7 @@ const routes = [
     //找回密码页面
     path: '/findpassword',
     name: 'findpassword',
-    component: findpassword
+    component: FindPassword
   },
   {
     //主页面

@@ -47,10 +47,10 @@
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.resourceType }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" width="300"
+                <el-table-column prop="resourceCreateTime" label="创建时间" :formatter="formatDate" width="200"
                     align="center" header-align="center">
                 </el-table-column>
-                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" width="300"
+                <el-table-column prop="resourceUpdateTime" label="更新时间" :formatter="formatDate" width="200"
                     align="center" header-align="center">
                 </el-table-column>
                 <el-table-column prop="remark" label="备注" align="center" header-align="center">
@@ -195,18 +195,6 @@ export default {
             this.editform = row
             this.currentRow = row
         },
-        // successUpload(res, row) {
-        //     console.log(res);
-        //     // 找到对应的资源数据并更新其 remark 字段
-        //     const resource = this.tableData.find(item => item.resourceId === row.resourceId);
-        //     if (resource) {
-        //         resource.remark = res.data;
-        //         // 手动触发重新渲染表格
-        //         this.pagedData = [...this.pagedData];
-        //         // 调用 confirmEdit 方法，将更新后的数据同步到后端
-        //         // this.confirmEdit();
-        //     }
-        // },
         successUpload(res, row) {
             console.log(res);
             // 找到对应的资源数据并更新其 remark 字段
