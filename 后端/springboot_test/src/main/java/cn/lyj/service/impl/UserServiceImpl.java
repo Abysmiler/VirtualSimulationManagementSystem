@@ -21,11 +21,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer delByIds(int[] ids) {
-        return userMapper.delByIds(ids);
-    }
-
-    @Override
     public Integer updateById(User user) {
         return userMapper.updateById(user);
     }

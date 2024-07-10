@@ -88,7 +88,7 @@ export default {
             username: '',
             dialogFormVisible: false,
             currentPage: 1,//当前页
-            pageSize: 10, //每页显示5条数据
+            pageSize: 10, //每页显示10条数据
             tableData: [],//表格数据
             pagedData: [],//分页后的数据
             editform: {

@@ -146,6 +146,7 @@ body {
 
 .input-length {
     width: 90%;
+    height: 40px;
     /* 你可以根据需要调整这个值 */
 }
 
@@ -243,6 +244,7 @@ body {
     position: relative;
     padding: 10px 20px;
     width: 100px;
+    height: 40px;
     border-radius: 50px;
     border: 1px solid #40a0ff7a;
     font-size: 14.4px;

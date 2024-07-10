@@ -21,8 +21,6 @@ public interface UserService {
 
     Integer del(Integer id);
 
-    Integer delByIds(int[] ids);
-
     Integer add(User user);
 
     boolean updatePasswordByEmail(String email, String newPassword);

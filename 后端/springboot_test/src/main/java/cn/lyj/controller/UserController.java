@@ -123,16 +123,6 @@ public class UserController {
         return Result.success();
     }
 
-    //    批量删除
-    @GetMapping("/del/{ids}")
-    public Result delByIds(@PathVariable int[] ids) {
-        Integer i = userService.delByIds(ids);
-        if (i == 0) {
-            return Result.error();
-        }
-        return Result.success();
-    }
-
     //    更新
     @PostMapping("/update")
     public Result update(@RequestBody User user) {

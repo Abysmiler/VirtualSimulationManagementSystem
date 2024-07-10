@@ -3,13 +3,13 @@
     <el-container class="container">
       <!-- 定义头部 -->
       <el-main class="main">
-        <div class="home-title" >欢迎使用虚拟仿真管理系统</div>
+        <div class="home-title" >欢迎您使用虚拟仿真管理系统</div>
         <el-tabs>
           <el-tab-pane  >
             <!-- 使用el-carousel组件实现轮播图  
                   :interval="3000"表示3000毫秒也就是3秒后跳转下一张图片
             -->
-            <el-carousel :interval="3000" height="50vh" type="card">
+            <el-carousel :interval="3000" height="45vh" type="card">
               <!-- v-for:遍历数组  
                    item:是一个在v-for循环中迭代的变量 
                    dormitoryImages:data中定义的数组
@@ -40,8 +40,7 @@ export default {
       dormitoryImages: [
         require("@/assets/主页1.jpg"),
         require("@/assets/主页2.jpg"),
-        require("@/assets/主页3.jpg"),
-        require("@/assets/主页4.jpg")
+        require("@/assets/主页3.jpg")
         /* 宿舍场景图片链接数组 */
       ]
     };
