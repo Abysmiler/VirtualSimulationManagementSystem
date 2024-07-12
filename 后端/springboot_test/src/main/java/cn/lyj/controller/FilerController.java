@@ -54,23 +54,33 @@ public class FilerController {
     //获取文件
     @GetMapping("/{flag}")
     public void avatarPath(@PathVariable String flag, HttpServletResponse response) throws IOException {
+        // 检查文件目录是否存在，如果不存在则创建该目录
         if (!FileUtil.isDirectory(filePath)) {
             FileUtil.mkdir(filePath);
         }
         OutputStream os;
+        // 获取文件目录中的所有文件名列表
         List<String> fileNames = FileUtil.listFileNames(filePath);
+        // 在文件名列表中查找包含`flag`的文件名
         String avatar = fileNames.stream().filter(name -> name.contains(flag)).findAny().orElse("");
         try {
+            // 如果找到相应的文件名
             if (StrUtil.isNotEmpty(avatar)) {
-                response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(avatar, "UTF-8"));
+                // 设置响应头，指定文件下载时的文件名
+                response.addHeader("Content-Disposition", "attachment;filename=" +
+                        URLEncoder.encode(avatar, "UTF-8"));
                 response.setContentType("application/octet-stream");
+                // 读取文件内容为字节数组
                 byte[] bytes = FileUtil.readBytes(filePath + avatar);
+                // 获取输出流
                 os = response.getOutputStream();
+                // 将文件内容写入输出流·
                 os.write(bytes);
                 os.flush();
                 os.close();
             }
         } catch (Exception e) {
+            // 捕获异常，打印错误信息
             System.out.println("文件下载失败");
         }
     }

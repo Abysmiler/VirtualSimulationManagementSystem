@@ -58,13 +58,21 @@
                         <span style="font-size: 14.4px; font-weight: normal;">{{ scope.row.remark }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" v-if="user.userType == '管理员'" align="center" header-align="center">
+                <el-table-column label="操作" v-if="user.userType == '管理员' " align="center" header-align="center">
                     <template slot-scope="scope">
-                        <div class="button-container">
-                            <el-button class="ctrl-btn edit-btn" type="primary" @click="edit(scope.row)">编辑</el-button>
+                        <div class="button-container" >
+                            <el-button class="ctrl-btn edit-btn"  type="primary" @click="edit(scope.row)" >编辑</el-button>
                             <el-popconfirm title="是否删除该资源?" @confirm="del(scope.row.resourceId)">
                                 <el-button slot="reference" type="danger" class="ctrl-btn del-btn">删除</el-button>
                             </el-popconfirm>
+                            <el-button class="ctrl-btn out-btn el-icon-download" type="success"
+                                @click="downloadResource(scope.row.remark)">下载</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" v-if="user.userType == '教师' " align="center" header-align="center">
+                    <template slot-scope="scope">
+                        <div class="button-container" >
                             <el-button class="ctrl-btn out-btn el-icon-download" type="success"
                                 @click="downloadResource(scope.row.remark)">下载</el-button>
                         </div>
@@ -209,8 +217,6 @@ export default {
                 this.editform.resourceType = resource.resourceType;
                 this.editform.resourceUpdateTime = new Date();
 
-                // 调用 confirmEdit 方法，将更新后的数据同步到后端
-                //this.confirmEdit();
             }
         },
 

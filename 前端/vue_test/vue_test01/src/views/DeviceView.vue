@@ -14,9 +14,11 @@
             <el-button v-if="user.userType == '管理员'" class="add-btn" type="primary" icon="el-icon-download" plain
                 @click="exportData()">导出</el-button>
             <el-upload action="http://localhost:8080/api/device/upload" :on-success="successUpload">
-                <el-button class="add-btn" style="margin-left: 10px;" type="primary"
+                <el-button v-if="user.userType == '管理员'" class="add-btn" style="margin-left: 10px;" type="primary"
                     icon="el-icon-upload2">导入</el-button>
             </el-upload>
+            <el-button v-if="user.userType == '教师'" class="add-btn" type="primary" icon="el-icon-download" plain
+                @click="exportData()">导出</el-button>
         </div>
         <el-dialog title="添加设备" :visible.sync="dialogAddVisible">
             <el-form ref="addForm" :model="addform" :rules="rules">

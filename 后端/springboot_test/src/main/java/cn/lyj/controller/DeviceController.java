@@ -82,10 +82,6 @@ public class DeviceController {
     @GetMapping("/export")
     public Result export(HttpServletResponse response) throws IOException {
 
-        // 一行一行的组装数据，放到一个List里面
-        // 每一行数据，对应数据库表中的一行数据，也就是对应Java的一个实体类
-        // 我们怎么知道它某一列就是对应某个表头呢？？需要映射数据，我们需要一个Map<key，value>，把这个map放到List里
-
         // 1.从数据库中查询出所有数据
         List<Device> all = deviceService.searchDevice();
         if (CollectionUtil.isEmpty(all)) {
