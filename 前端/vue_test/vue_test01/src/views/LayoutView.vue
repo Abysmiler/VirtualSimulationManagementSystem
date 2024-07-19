@@ -1,3 +1,4 @@
+import router from './router';
 <template>
   <div class="app">
     <el-container>
@@ -115,14 +116,19 @@ export default {
     setInterval(this.updateTime, 1000);
   },
   methods: {
+    //清除当前浏览器的登录状态信息
     loginout() {
-      // 清除浏览器当前的登录状态权限
-      localStorage.removeItem("user")
-      // 跳转到登录页
+      localStorage.removeItem("user");
       setTimeout(() => {
         this.$router.push("/login")
       }, 1000)
-
+    },
+    userinfo() {
+      this.$router.push('/userinfo').catch(err => {
+        if (err.name !== 'NavigationDuplicated') {
+          throw err
+        }
+      })
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -140,7 +146,6 @@ export default {
   }
 }
 </script>
-
 <style lang="less">
 .current-time {
   font-size: 30px; // 设置大小
@@ -152,7 +157,11 @@ export default {
 }
 
 .myHeader {
-  background-color: #1B1D26;
+  background-color: #2b2b2b;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
 }
 
 .top-title {

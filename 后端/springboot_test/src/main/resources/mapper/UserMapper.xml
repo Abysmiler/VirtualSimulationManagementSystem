@@ -12,6 +12,7 @@
 
     <select id="selectAll" resultMap="resultUserMap" >
         select *
+        from users
         <where>
             type != '管理员' AND type != '超级管理员'
             <if test="name!=null and name!=''">
