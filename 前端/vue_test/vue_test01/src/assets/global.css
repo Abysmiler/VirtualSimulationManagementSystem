@@ -1,9 +1,317 @@
-body{
+body {
     margin: 0;
     padding: 0;
 }
+
 /*所有元素变成盒状模型*/
 /*外边距不会占用额外的1px像素*/
-*{
-    box-sizing: border-box; 
+* {
+    box-sizing: border-box;
+}
+
+.ctrl-btn {
+    width: 80px;
+    margin-right: 5px;
+    border-radius: 50px;
+    color: white;
+    border: none;
+    font-size: 14.4px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.edit-btn:hover {
+    color: #409EFF;
+}
+
+.edit-btn:after {
+    content: "";
+    background: white;
+    position: absolute;
+    z-index: -1;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+}
+
+.edit-btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.out-btn:hover {
+    color: #67c23a;
+}
+
+.out-btn:after {
+    content: "";
+    background: white;
+    position: absolute;
+    z-index: -1;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+}
+
+.out-btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.in-btn:hover {
+    color: #409EFF;
+}
+
+.in-btn:after {
+    content: "";
+    background: white;
+    position: absolute;
+    z-index: -1;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+}
+
+.in-btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+
+.del-btn:hover {
+    color: #F56C6C;
+}
+
+.del-btn:after {
+    content: "";
+    background: white;
+    position: absolute;
+    z-index: -1;
+    left: -20%;
+    right: -20%;
+    top: 0;
+    bottom: 0;
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+}
+
+.del-btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.input {
+    width: 12%;
+    margin-right: 10px;
+}
+
+.btn {
+    font-size: 0.9em;
+    width: 80px;
+    margin-right: 5px;
+    border-radius: 50px;
+}
+
+.table-container {
+    height: 612px;
+    margin-top: 20px;
+    /*表格容器的高度*/
+
+}
+
+.pagination {
+    position: absolute;
+    bottom: 0;
+    left: 60%;
+    transform: translateX(-50%);
+    margin-bottom: 20px; /* 调整距离表格的位置 */
+}
+
+
+.input-length {
+    width: 90%;
+    height: 40px;
+    /* 你可以根据需要调整这个值 */
+}
+
+.dialogWidth {
+    margin: auto;
+    width: 50%;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+}
+
+.input-linght {
+    font-size: 0.9em;
+    padding: 0.6em 1em;
+    border: none;
+    border-radius: 50px;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 16%;
+    margin-right: 10px;
+    color: #333;
+}
+
+.input-linght:hover {
+    background-color: #f2f2f2;
+}
+
+.input-linght:focus {
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-linght::placeholder {
+    color: #999;
+}
+
+.highlight {
+    position: absolute;
+    bottom: 0;
+    left: 0.8%;
+    width: 0;
+    height: 2px;
+    background-color: #409EFF;
+    transition: width 0.3s ease;
+}
+
+.input-linght:focus+.highlight {
+    width: 14.6%;
+}
+
+.input-linght:focus {
+    animation: input-focus 0.3s ease;
+}
+
+
+.confirm-btn:link,
+.confirm-btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgb(27, 27, 27);
+    padding: 10px 30px;
+    border: 1px solid;
+    border-radius: 1000px;
+    display: inline-block;
+    transition: all .2s;
+    position: relative;
+}
+
+.confirm-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(27, 27, 27, .5);
+}
+
+.confirm-btn:active {
+    transform: translateY(-3px);
+}
+
+.confirm-btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+    transition: all .3s;
+}   
+
+.add-btn {
+    position: relative;
+    padding: 10px 20px;
+    width: 100px;
+    height: 40px;
+    border-radius: 50px;
+    border: 1px solid #40a0ff7a;
+    font-size: 14.4px;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 2px;
+    background: transparent;
+    color: #409EFF;
+    overflow: hidden;
+    box-shadow: 0 0 0 0 transparent;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+
+.add-btn:hover {
+    color: #fff;
+    background: #409EFF;
+    box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.24);
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+}
+
+.add-btn:hover::before {
+    -webkit-animation: sh02 0.5s 0s linear;
+    -moz-animation: sh02 0.5s 0s linear;
+    animation: sh02 0.5s 0s linear;
+}
+
+.add-btn::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 0 0 50px 30px #fff;
+    -webkit-transform: skewX(-20deg);
+    -moz-transform: skewX(-20deg);
+    -ms-transform: skewX(-20deg);
+    -o-transform: skewX(-20deg);
+    transform: skewX(-20deg);
+}
+
+@keyframes sh02 {
+    from {
+        opacity: 0;
+        left: 0%;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        left: 100%;
+    }
+}
+
+.add-btn:active {
+    box-shadow: 0 0 0 0 transparent;
+    -webkit-transition: box-shadow 0.2s ease-in;
+    -moz-transition: box-shadow 0.2s ease-in;
+    transition: box-shadow 0.2s ease-in;
 }

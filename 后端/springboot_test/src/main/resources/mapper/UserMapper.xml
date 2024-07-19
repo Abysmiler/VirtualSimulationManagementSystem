@@ -2,102 +2,158 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--namespace命名空间: 要和mapper持久层层的接口全限定名相同-->
 <mapper namespace="cn.lyj.mapper.UserMapper">
 
-    <resultMap id="resultUserMap" type="user">
+    <resultMap id="resultUserMap" type="cn.lyj.entity.User">
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="userType"/>
     </resultMap>
 
-    <insert id="addUser" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (name, username, password, phone, type, email, create_time, update_time)
-        VALUES (#{name}, #{username}, #{password}, #{phone}, #{type}, #{email}, #{createTime}, #{updateTime})
-    </insert>
-
-    <!--    用户信息更新-->
-    <update id="updateById">
-        update user
-        <!--                        <set>-->
-        <!--                            <if test="name !=null and name !=''">-->
-        <!--                                name = #{user.name},-->
-        <!--                            </if>-->
-        <!--                            <if test="username !=null and username !=''">-->
-        <!--                                username = #{user.username},-->
-        <!--                            </if>-->
-        <!--                            <if test="password !=null and password !=''">-->
-        <!--                                password = #{user.password},-->
-        <!--                            </if>-->
-        <!--                            <if test="email !=null and email !=''">-->
-        <!--                                email = #{user.email},-->
-        <!--                            </if>-->
-        <!--                            <if test="phone !=null and phone !=''">-->
-        <!--                                phone = #{user.phone},-->
-        <!--                            </if>-->
-        <!--                            <if test="type !=null and type !=''">-->
-        <!--                                type = #{user.type},-->
-        <!--                            </if>-->
-        <!--                        </set>-->
-        set username = #{user.username},
-        name = #{user.name},
-        password = #{user.password},
-        email = #{user.email},
-        phone = #{user.phone},
-        type = #{user.type}
-        where id = #{user.id}
-    </update>
-
-    <delete id="deleteById">
-    delete from user where id =#{id};
-    </delete>
-
-    <!--    </delete>-->
-    <!--    <delete id="deleteByIds">-->
-    <!--        delete from users-->
-    <!--        where id in-->
-    <!--        <foreach collection="ids" item="id" separator="," open="(" close=")">-->
-    <!--            #{id}-->
-    <!--        </foreach>-->
-    <!--    </delete>-->
-
-    <select id="selectAll" resultMap="resultUserMap">
+    <select id="selectAll" resultMap="resultUserMap" >
         select *
-        from user
-        where  type!='role_admin'
-    </select>
-
-    <select id="selectOne" resultMap="resultUserMap">
-        select *
-        from user
         <where>
-            <if test="name!=null and name !=''">
+            type != '管理员' AND type != '超级管理员'
+            <if test="name!=null and name!=''">
                 and name like concat('%',#{name},'%')
             </if>
-            <if test="phone!=null and phone !=''">
+            <if test="phone!=null and phone!=''">
                 and phone like concat('%',#{phone},'%')
             </if>
         </where>
     </select>
 
-
-    <!--根据手机号查询用户-->
-    <select id="getUserByPhone" resultType="cn.lyj.entity.User">
+    <select id="selectAllSuper" resultMap="resultUserMap" >
         select *
-        from user
+        from users
+        <where>
+            type != '超级管理员'
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone like concat('%',#{phone},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByCondition" resultMap="resultUserMap" >
+        select *
+        from users
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="birthday != null and birthday != ''">
+                and birthday = #{birthday}
+            </if>
+            <if test="sex != null and sex != ''">
+                and sex = #{sex}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="cn.lyj.entity.User" >
+        INSERT INTO users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="email != null">email,</if>
+            <if test="intro != null">intro,</if>
+            <if test="phone != null">phone,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="userType != null">type,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="username != null">#{username},</if>
+            <if test="password != null">#{password},</if>
+            <if test="email != null">#{email},</if>
+            <if test="intro != null">#{intro},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="userType != null">#{userType},</if>
+        </trim>
+    </insert>
+
+    <delete id="del">
+        DELETE FROM users
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateUser" parameterType="cn.lyj.entity.User">
+        UPDATE users
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getUserByPhone" resultMap="resultUserMap" >
+        select *
+        from users
         where phone = #{phone}
     </select>
 
-    <!--    根据登录信息查询用户信息-->
-    <select id="getUserByLoginInfo" resultType="cn.lyj.entity.User">
-        SELECT *
-        FROM `user`
-        WHERE username = #{username}
-          AND `password` = #{password}
+    <!--    登录-->
+    <select id="getUserByLoginInfo" resultMap="resultUserMap" >
+        select *
+        from users
+        where username = #{username}
+          and password = #{password}
     </select>
 
-    <!--    根据id查询用户-->
-    <select id="findById" resultType="cn.lyj.entity.User">
-        SELECT *
-        FROM `user`
-        WHERE id = #{id}
+    <select id="findById" resultMap="resultUserMap" >
+        select *
+        from users
+        where id = #{id}
     </select>
 
+    <select id="getUserByUsername" resultType="cn.lyj.entity.User">
+        select *
+        from users
+        where username = #{username}
+    </select>
+
+    <update id="updateById">
+        update users
+        <set>
+            <if test="user.username != null">username = #{user.username},</if>
+            <if test="user.name != null">name = #{user.name},</if>
+            <if test="user.password != null">password = #{user.password},</if>
+            <if test="user.email != null">email = #{user.email},</if>
+            <if test="user.phone != null">phone = #{user.phone},</if>
+            <if test="user.userType != null">type = #{user.userType},</if>
+            <if test="user.age != null">age = #{user.age},</if>
+            <if test="user.address != null">address = #{user.address},</if>
+            <if test="user.sex != null">sex = #{user.sex},</if>
+        </set>
+        where id = #{user.id}
+    </update>
+
+    <update id="updatePasswordByEmail">
+        UPDATE users
+        SET password = #{newPassword}
+        WHERE email = #{email}
+    </update>
 </mapper>

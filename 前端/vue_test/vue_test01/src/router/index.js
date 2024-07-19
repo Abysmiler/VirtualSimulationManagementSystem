@@ -6,20 +6,35 @@ import UserView from '../views/UserView.vue'
 import RegisterView from '../views/Register.vue'
 import LayoutView from '../views/LayoutView.vue'
 import LoginView from '../views/Login.vue'
+import AdminView from '../views/AdminView.vue'
+import LabView from '@/views/LabView.vue'
+import CourseView from '@/views/CourseView.vue'
+import FindPassword from '@/views/FindPassword.vue'
+import ResourceView from '@/views/ResourceView.vue'
+import UserInfoView from '@/views/UserInfoView.vue'
+import DeviceView from '@/views/DeviceView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
 
   {
-    path: '/register',
-    name: 'register',
-    component: RegisterView
-  },
+    //注册页面
+    path:'/register',
+    name:'register',
+    component:RegisterView
+  } ,
   {
-    path: '/login',
-    name: 'login',
-    component: LoginView
+    //登录页面
+    path:'/login',
+    name:'login',
+    component:LoginView
+  } ,
+  {
+    //找回密码页面
+    path: '/findpassword',
+    name: 'findpassword',
+    component: FindPassword
   },
   {
     path: '/',
@@ -38,7 +53,42 @@ const routes = [
       {
         path: 'user',
         name: 'user',
-        component: UserView
+        component: UserView,
+      },
+      {
+        //管理员页面
+        path: '/admin',
+        name: 'admin',
+        component: AdminView
+      },
+      {
+        //实验室页面
+        path:'/lab',
+        name:'lab',
+        component: LabView
+      },
+      {
+        //设备页面
+        path: '/device',
+        name: 'device',
+        component: DeviceView
+      },
+      {
+        //课程界面
+        path: '/course',
+        name: 'course',
+        component: CourseView
+      },
+      {
+        //资源界面
+        path: '/resource',
+        name: 'resource',
+        component: ResourceView
+      },
+      {
+        path: '/userinfo',
+        name: 'userinfo',
+        component: UserInfoView
       }
     ]
   },
@@ -65,5 +115,6 @@ router.beforeEach((to,from,next) => {
   next();
 })    
 
-
+//导出路由
 export default router
+
