@@ -7,11 +7,15 @@ import java.util.List;
 
 public interface UserMapper {
 
-    List<User> selectAll(String name, String phone);
+    List<User> selectAll();
 
-    Integer del(Integer id);
+    List<User> selectOne(String name, String phone);
 
-    Integer add(User user);
+    Integer deleteById(Integer id);
+//
+//    Integer deleteByIds(int[] ids);
+
+    Integer addUser(User user);
 
     User getUserByPhone(String phone);
 
@@ -20,10 +24,4 @@ public interface UserMapper {
     User findById(Integer id);
 
     Integer updateById(@Param("user") User user);
-
-    int updatePasswordByEmail(String email, String newPassword);
-
-    List<User> selectAllSuper(String name, String phone);
-
-    User getUserByUsername(String username);
 }

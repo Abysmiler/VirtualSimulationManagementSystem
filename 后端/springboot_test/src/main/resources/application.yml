@@ -7,16 +7,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/virtualsimulationmanagementsystem?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/mybatis_demo1?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
   devtools:
     add-properties: true
     restart:
       additional-paths: src/main/java
-  #允许上传最大为1MB的文件
-  servlet:
-    multipart:
-      max-file-size: 1MB
-      max-request-size: 1MB
 #配置Mybatis和xml映射
 mybatis:
   # sql映射文件地址
@@ -32,10 +27,6 @@ logging:
 # 配置Swagger
 springdoc:
   swagger-ui.path: /swagger-ui.html
-
-#上传文件
-file:
-  upload-dir: uploads/
 
 
 
