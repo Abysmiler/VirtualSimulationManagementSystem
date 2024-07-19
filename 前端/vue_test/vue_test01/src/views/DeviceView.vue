@@ -9,7 +9,7 @@
                 @click="dialogAddVisible = true">新建</el-button>
             <el-button v-if="user.userType == '管理员'" class="add-btn"
                 :class="{ 'confirm-btn btn': isSelectMode && selectedRows.length > 0 }" @click="toggleSelectMode">
-                {{ isSelectMode ? (selectedRows.length > 0 ? '删除' : '取消') : '选择' }}
+                {{ isSelectMode ? (selectedRows.length > 0 ? '确认删除' : '取消') : '批量删除' }}
             </el-button>
             <el-button v-if="user.userType == '管理员'" class="add-btn" type="primary" icon="el-icon-download" plain
                 @click="exportData()">导出</el-button>

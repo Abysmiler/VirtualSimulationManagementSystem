@@ -24,4 +24,6 @@ public interface UserMapper {
     int updatePasswordByEmail(String email, String newPassword);
 
     List<User> selectAllSuper(String name, String phone);
+
+    User getUserByUsername(String username);
 }

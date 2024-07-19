@@ -26,4 +26,6 @@ public interface UserService {
     boolean updatePasswordByEmail(String email, String newPassword);
 
     List<User> selectAllSuper(String name, String phone);
+
+    User getUserByUsername(String name);
 }
