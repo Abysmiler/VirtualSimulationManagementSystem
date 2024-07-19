@@ -189,7 +189,7 @@ export default {
                             resourceCreateTime: '',
                         };
                     } else {
-                        this.$message.error(res.msg);
+                        this.$message.error('添加失败');
                     }
                 })
             });
@@ -222,7 +222,11 @@ export default {
 
         //文件下载
         downloadResource(flag) {
-            location.href = 'http://localhost:8080/api/files/' + flag
+            if (!flag) {
+            this.$message.error('文件标识不存在，无法下载');
+            return;
+        }
+            location.href = 'http://localhost:8080/api/files/' + flag;            
         },
 
         confirmEdit() {

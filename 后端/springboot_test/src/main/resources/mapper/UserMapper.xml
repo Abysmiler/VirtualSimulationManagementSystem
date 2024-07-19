@@ -130,6 +130,12 @@
         where id = #{id}
     </select>
 
+    <select id="getUserByUsername" resultType="cn.lyj.entity.User">
+        select *
+        from users
+        where username = #{username}
+    </select>
+
     <update id="updateById">
         update users
         <set>

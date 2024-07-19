@@ -41,37 +41,6 @@ public class UserController {
         return Result.success(user);
     }
 
-//    //    注册
-//    @PostMapping("/register")
-//    public Result register(@RequestBody User user) {
-//        //验证用户账户的合法性
-//        //1.判断用户必要信息是否为空 （手机号、学号、姓名、用户名）
-//        if (user.getName().isEmpty() ||
-//                user.getUsername().isEmpty() ||
-//                user.getPassword().isEmpty() ||
-//                user.getEmail().isEmpty() ||
-//                user.getPhone().isEmpty() ||
-//                user.getUserType().isEmpty()) {
-//            return Result.error("注册信息不完整");
-//        }
-//        //2.某些信息是否可以重复，如果不能重复的，需要判断是否已被使用
-//        //判断手机号是否已被使用
-//        //2.1根据手机号查询user表，如果存在该手机号的用户，那么提示前端该手机号已被注册
-//        User dataBaseUser = userService.getUserByPhone(user.getPhone());
-//        //2.2如果不存在，继续往后执行
-//        if (dataBaseUser != null) {
-//            return Result.error("该手机号已经注册");
-//        }
-//        user.setCreateTime(new Date());
-//        Integer i = userService.add(user);
-//        if (i == 1) {
-//            //保存注册信息到用户表，返回成功给前端
-//            return Result.success();
-//        }
-//        return Result.error("注册用户添加失败");
-//        //3.检验两次密码输入是否一致，保证代码的健壮性
-//    }
-
     // 注册
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
@@ -89,10 +58,11 @@ public class UserController {
         // 2. 某些信息是否可以重复，如果不能重复的，需要判断是否已被使用
         // 判断手机号是否已被使用
         // 2.1 根据手机号查询user表，如果存在该手机号的用户，那么提示前端该手机号已被注册
-        User dataBaseUser = userService.getUserByPhone(user.getPhone());
+//        User dataBaseUser = userService.getUserByPhone(user.getPhone());
+        User dataBaseUser = userService.getUserByUsername(user.getUsername());
         // 2.2 如果不存在，继续往后执行
         if (dataBaseUser != null) {
-            return Result.error("该手机号已经注册");
+            return Result.error("该用户名已经注册");
         }
 
         user.setCreateTime(new Date());
