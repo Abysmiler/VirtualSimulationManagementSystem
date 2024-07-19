@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AboudView from '../views/AboutView.vue'
+import AboutView from '../views/AboutView.vue'
 import UserView from '../views/UserView.vue'
-import LayoutView from '../views/LayoutView.vue'
 import RegisterView from '../views/Register.vue'
+import LayoutView from '../views/LayoutView.vue'
 import LoginView from '../views/Login.vue'
 import AdminView from '../views/AdminView.vue'
 import LabView from '@/views/LabView.vue'
@@ -17,6 +17,7 @@ import DeviceView from '@/views/DeviceView.vue'
 Vue.use(VueRouter)
 
 const routes = [
+
   {
     //注册页面
     path:'/register',
@@ -36,24 +37,21 @@ const routes = [
     component: FindPassword
   },
   {
-    //主页面
     path: '/',
     component: LayoutView,
-    children:[
+    children: [
       {
-        path:'/',
-        name:'home',
-        component:HomeView
+        path: '',
+        name: 'home',
+        component: HomeView
       },
       {
-        //关于页面
-        path: '/about',
+        path: 'about',
         name: 'about',
-        component: AboudView
+        component: AboutView
       },
       {
-        //用户页面
-        path: '/user',
+        path: 'user',
         name: 'user',
         component: UserView,
       },
@@ -93,24 +91,29 @@ const routes = [
         component: UserInfoView
       }
     ]
-  }
+  },
 ]
-//定义路由首位，如果没有登录，则不允许用户访问
+
+
+// 定义路由守卫，如果没有登录，则不允许访问
 const router = new VueRouter({
   routes
 })
 
 router.beforeEach((to,from,next) => {
-  if(to.path === '/login' || to.path === '/register' || to.path === '/findpassword'){
-    next();
-  } else {
-    const user = localStorage.getItem("user");
-    if(!user){
-      return next("/login");
-    }
+  if(to.path === '/login'){
     next();
   }
-}) 
+  if(to.path === '/register'){
+    next();
+  }
+  // 如果访问的路径不是登录或注册，
+  const admin = localStorage.getItem("user");
+  if(!admin && to.path !='/login' && to.path != '/register'){
+    return next("/login");
+  }
+  next();
+})    
 
 //导出路由
 export default router

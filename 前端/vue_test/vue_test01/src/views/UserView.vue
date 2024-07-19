@@ -110,13 +110,11 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+import request from '../utils/request';
 
 export default {
-    //数据
     data() {
         return {
-            user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {},//当前登录用户的信息
             tableData: [],
             name: '',
             phone: '',
@@ -127,20 +125,19 @@ export default {
             pagedData: [],//分页后的数据
             editform: {
                 name: '',
-                region: '',
-                phone: '',
                 username: '',
+                password: '',
                 email: '',
                 userType: ''
             },
-            formLabelWidth: '120px'
+            formLabelWidth: '80px'
         }
     },
-    //方法
     methods: {
-        //删除数据的方法
+
+        // 删除表单
         del(id) {
-            request.delete('/user/del/' + id).then(res => {
+            request.delete('user/del/' + id).then(res => {
                 if (res.code == 0) {
                     this.$message.success("删除成功")
                     this.selectAll()
@@ -149,61 +146,62 @@ export default {
                 }
             })
         },
-        confirmEdit() {
-            //发送请求，修改对应的用户信息
-            request.post('/user/update', this.editform).then(res => {
-                if (res.code == 0) {
-                    this.$message.success("修改成功");
-                } else {
 
+        // 表单修改确认
+        confirmEdit() {
+            // 发送请求修改对应的用户信息
+            request.post('/user/update', this.editForm).then(res => {
+                if (res.code == 0) {
+                    this.$message.success("修改成功")
                 }
             })
             this.dialogFormVisible = false
         },
-        //编辑按钮方法
         edit(row) {
+            this.editForm = row
             this.dialogFormVisible = true
-            this.editform = row
         },
         selectAll() {
-            let params = {
-                name: this.name,
-                phone: this.phone
-            }
-            //调用封装好的request(axios)发送请求后端接口
-            request.get("/user/selectAll", { params }).then(res => {
+            //调用封装好的request(axios)发送请求访问后端接口 
+            request.get('/user/selectAll').then(res => {
                 if (res.code == 0) {
                     //查询成功，将数据绑定到表格的data中
                     this.tableData = res.data;
-                    //分页
-                    this.handlePagination();
-                    // alert("查询成功");
                 } else {
                     this.$message.error(res.msg)
                 }
             })
         },
-        //分页
-        handleSizeChange(val) {
-            this.pageSize = val;
-            this.handlePagination();
-        },
-        //分页
-        handleCurrentChange(val) {
-            this.currentPage = val;
-            this.handlePagination();
-        },
-        //分页
-        handlePagination() {
-            const start = (this.currentPage - 1) * this.pageSize;
-            const end = start + this.pageSize;
-            this.pagedData = this.tableData.slice(start, end);
-        },
+
+        // 按条件查询按钮方法
+        selectOne() {
+            let params = {
+                name: this.name,
+                phone: this.phone
+            }
+            //调用封装好的request(axios)发送请求访问后端接口
+            // alert(111)   
+            request.get('/user/selectOne', { params }).then(res => {
+                if (res.code == 0) {
+                    console.log(res)
+                    //查询成功，将数据绑定到表格的data中
+                    this.tableData = res.data;
+                    console.log("搜索成功")
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+        }
+
+
     },
+
+    //自动执行了作用域()中的代码 
     mounted() {
         this.selectAll()
     }
 }
+
 </script>
 
 <style scoped>

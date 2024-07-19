@@ -1,4 +1,3 @@
-<!-- 注册界面 -->
 <template>
     <section>
         <div class="color"></div>
@@ -56,7 +55,7 @@
 
 
 <script>
-// 引入了组件
+//引入
 import request from '@/utils/request';
 
 export default {
@@ -70,6 +69,7 @@ export default {
             ruleForm: {
                 name: '',
                 username: '',
+                age: '',
                 email: '',
                 phone: '',
                 password: '',
