@@ -9,11 +9,7 @@ import java.util.List;
  */
 public interface UserService {
 
-    List<User> selectAll();
-
-    List<User> selectOne(String name, String phone);
-
-    Integer addUser(User user);
+    List<User> selectAll(String name, String phone);
 
     User getUserByPhone(String phone);
 
@@ -23,5 +19,13 @@ public interface UserService {
 
     Integer updateById(User user);
 
-    Integer delById(Integer id);
+    Integer del(Integer id);
+
+    Integer add(User user);
+
+    boolean updatePasswordByEmail(String email, String newPassword);
+
+    List<User> selectAllSuper(String name, String phone);
+
+    User getUserByUsername(String name);
 }
